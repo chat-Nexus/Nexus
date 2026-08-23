@@ -7,108 +7,112 @@
     <title>(live chat)Online chat & make a friend |nexus chat</title>
     <style>
         * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; font-family: Arial, sans-serif; background-color: #f4f6f9; display: flex; flex-direction: column; }
+        html, body { margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; display: flex; flex-direction: column; }
         
         #waitingScreen {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
-            background: linear-gradient(135deg, #007bff 0%, #004085 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             z-index: 5000; color: white; transition: opacity 0.4s ease;
         }
-        .waiting-logo { font-size: 32px; font-weight: 900; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+        .waiting-logo { font-size: 34px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .spinner {
-            width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.3);
+            width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.2);
             border-top: 4px solid #ffffff; border-radius: 50%;
             animation: spin 1s linear infinite; margin-bottom: 15px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .waiting-text { font-size: 14px; opacity: 0.9; }
+        .waiting-text { font-size: 14px; opacity: 0.9; letter-spacing: 1px; }
 
         #landingPageView { 
             width: 100vw; height: 100vh; height: 100dvh; 
-            background: linear-gradient(135deg, #007bff 0%, #004085 100%); 
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%); 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
             padding: 20px; text-align: center; color: white; position: fixed; top: 0; left: 0; z-index: 3000; 
             overflow-y: auto;
         }
         .landing-container { max-width: 460px; width: 100%; display: flex; flex-direction: column; align-items: center; margin: auto; padding: 15px 0; }
-        .nexus-brand-tag { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; background: rgba(255, 255, 255, 0.2); padding: 6px 16px; border-radius: 20px; margin-bottom: 12px; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .landing-title { font-size: 32px; margin: 0 0 8px 0; font-weight: 900; }
+        .nexus-brand-tag { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; background: rgba(255, 255, 255, 0.15); padding: 6px 18px; border-radius: 20px; margin-bottom: 12px; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); }
+        .landing-title { font-size: 32px; margin: 0 0 8px 0; font-weight: 900; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .landing-desc { font-size: 14px; margin: 0 0 16px 0; opacity: 0.9; line-height: 1.5; }
-        .landing-card { width: 100%; background: #ffffff; border: 1px solid #e2e8f0; padding: 24px 22px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); text-align: left; color: #333333; }
+        .landing-card { width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 26px 22px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: left; color: #1e293b; }
         
-        .landing-input, .landing-select { width: 100%; padding: 12px 14px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background: #f8f9fa; color: #333; outline: none; }
-        .landing-input:focus, .landing-select:focus { border-color: #007bff; box-shadow: 0 0 0 3px rgba(0,123,255,0.2); background: #ffffff; }
+        .landing-input, .landing-select { width: 100%; padding: 12px 14px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; background: #f8fafc; color: #1e293b; outline: none; transition: all 0.3s; }
+        .landing-input:focus, .landing-select:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,0.15); background: #ffffff; }
         
         .landing-avatar-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
-        .landing-avatar-item { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; border: 2px solid #cbd5e1; object-fit: cover; background: #f1f5f9; }
-        .landing-avatar-item.selected { border-color: #007bff; transform: scale(1.1); box-shadow: 0 4px 10px rgba(0,123,255,0.3); }
+        .landing-avatar-item { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; border: 2px solid #cbd5e1; object-fit: cover; background: #f1f5f9; transition: all 0.2s; }
+        .landing-avatar-item.selected { border-color: #6366f1; transform: scale(1.1); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
 
-        .landing-submit-btn { width: 100%; padding: 13px; background: #007bff; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .landing-submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(79,70,229,0.4); transition: opacity 0.2s; }
+        .landing-submit-btn:hover { opacity: 0.9; }
         .landing-switch-text { text-align: center; margin-top: 15px; font-size: 13px; color: #64748b; cursor: pointer; font-weight: 500; }
-        .landing-switch-text span { color: #007bff; text-decoration: underline; font-weight: bold; }
+        .landing-switch-text span { color: #4f46e5; text-decoration: underline; font-weight: bold; }
 
-        .brand-header { flex-shrink: 0; background-color: #007bff; color: white; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 5px 12px rgba(0,0,0,0.25); z-index: 100; }
-        .brand-top-row { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .brand-header h1 { margin: 0; font-size: 26px; font-weight: bold; }
-        .user-display-badge { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: bold; background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 24px; cursor: pointer; }
+        .brand-header { flex-shrink: 0; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 100; }
+        .brand-top-row { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .brand-header h1 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 0.5px; }
+        .user-display-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; background: rgba(255, 255, 255, 0.2); padding: 8px 16px; border-radius: 24px; cursor: pointer; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
         .user-display-badge svg { width: 18px; height: 18px; fill: currentColor; }
 
         .search-filter-wrapper { width: 100%; max-width: 520px; display: flex; align-items: center; gap: 8px; position: relative; }
-        .search-input { width: 100%; padding: 12px 18px; border-radius: 24px; border: none; font-size: 15px; outline: none; background: rgba(255, 255, 255, 0.95); }
-        .gender-filter-btn { background: rgba(255, 255, 255, 0.25); border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: white; position: relative; }
+        .search-input { width: 100%; padding: 12px 18px; border-radius: 24px; border: none; font-size: 14px; outline: none; background: rgba(255, 255, 255, 0.95); box-shadow: 0 4px 15px rgba(0,0,0,0.1); color: #1e293b; }
+        .gender-filter-btn { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255,255,255,0.3); width: 44px; height: 44px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; color: white; position: relative; backdrop-filter: blur(10px); }
         .gender-filter-btn svg { width: 20px; height: 20px; fill: currentColor; }
-        .gender-dropdown-menu { position: absolute; top: 52px; right: 0; background: white; color: #333; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,0.2); width: 160px; display: none; z-index: 1000; }
+        .gender-dropdown-menu { position: absolute; top: 52px; right: 0; background: white; color: #1e293b; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 160px; display: none; z-index: 1000; overflow: hidden; border: 1px solid #e2e8f0; }
         .gender-dropdown-menu.show { display: block; }
-        .gender-dropdown-item { padding: 10px 16px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+        .gender-dropdown-item { padding: 12px 16px; font-size: 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; font-weight: 500; }
+        .gender-dropdown-item:hover { background: #f8fafc; color: #4f46e5; }
 
-        .main-container { flex: 1; width: 100%; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; overflow: hidden; padding: 12px 15px 65px 15px; }
+        .main-container { flex: 1; width: 100%; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; overflow: hidden; padding: 12px 15px 70px 15px; background: #0f172a; }
         .section-view { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
-        .scrollable-list { flex: 1; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; }
+        .scrollable-list { flex: 1; overflow-y: auto; border: 1px solid #334155; border-radius: 16px; background: #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #007bff; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; }
-        .nav-item { background: none; border: none; color: rgba(255,255,255,0.6); font-size: 12px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
-        .nav-item.active { color: white; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 10px 0; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); }
+        .nav-item { background: none; border: none; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; transition: color 0.2s; }
+        .nav-item.active { color: #818cf8; }
         .nav-icon { width: 22px; height: 22px; fill: currentColor; }
-        .nav-notification-dot { position: absolute; top: 0; right: 28%; width: 9px; height: 9px; background-color: #ff3366; border-radius: 50%; display: none; }
+        .nav-notification-dot { position: absolute; top: 0; right: 28%; width: 8px; height: 8px; background-color: #f43f5e; border-radius: 50%; display: none; }
         .nav-notification-dot.show { display: block; }
 
-        .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 15px; }
-        .fullscreen-form-box { background: #fff; padding: 22px; border-radius: 12px; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; }
+        .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 15px; }
+        .fullscreen-form-box { background: #1e293b; border: 1px solid #334155; color: white; padding: 24px; border-radius: 20px; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
         .hidden { display: none !important; }
-        input.auth-input, select.auth-input, button.form-submit { display: block; width: 100%; margin-bottom: 12px; padding: 10px 14px; border: 1px solid #ccc; border-radius: 6px; font-size: 15px; }
-        button.form-submit { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; }
+        input.auth-input, select.auth-input, button.form-submit { display: block; width: 100%; margin-bottom: 12px; padding: 12px 14px; border: 1px solid #475569; border-radius: 10px; font-size: 14px; background: #0f172a; color: white; outline: none; }
+        button.form-submit { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; cursor: pointer; font-weight: bold; box-shadow: 0 4px 12px rgba(79,70,229,0.3); }
         
-        .avatar-options-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
-        .avatar-option-item { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; object-fit: cover; background: #e2e8f0; }
-        .avatar-option-item.selected { border-color: #007bff; }
+        .avatar-options-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 16px; }
+        .avatar-option-item { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; object-fit: cover; background: #0f172a; }
+        .avatar-option-item.selected { border-color: #6366f1; }
 
-        .list-card-item { padding: 14px 16px; background: #fff; border-bottom: 1px solid #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
-        .list-card-item:hover { background: #f1f5f9; }
-        .item-avatar { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; margin-right: 14px; flex-shrink: 0; background: #cbd5e1; }
+        .list-card-item { padding: 14px 16px; background: #1e293b; border-bottom: 1px solid #334155; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; }
+        .list-card-item:hover { background: #334155; }
+        .item-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; margin-right: 14px; flex-shrink: 0; background: #334155; border: 2px solid rgba(255,255,255,0.1); }
         .item-info { flex-grow: 1; overflow: hidden; }
-        .item-title-wrapper { display: flex; align-items: baseline; gap: 6px; margin-bottom: 3px; flex-wrap: wrap; }
-        .item-title { font-weight: bold; color: #111; font-size: 16px; margin: 0; }
-        .item-meta-tag { font-size: 11px; color: #555; background: #e2e8f0; padding: 1px 6px; border-radius: 4px; }
-        .item-sub { font-size: 13px; color: #555; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .delete-chat-btn { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; display: none; }
+        .item-title-wrapper { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
+        .item-title { font-weight: bold; color: #f8fafc; font-size: 15px; margin: 0; }
+        .item-meta-tag { font-size: 11px; color: #cbd5e1; background: #334155; padding: 2px 8px; border-radius: 6px; font-weight: 500; }
+        .item-sub { font-size: 13px; color: #94a3b8; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .delete-chat-btn { background: #f43f5e; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; display: none; }
         .list-card-item.show-delete .delete-chat-btn { display: block; }
 
-        #chatRoomView { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: #fff; z-index: 1500; display: flex; flex-direction: column; overflow: hidden; }
-        .chat-header-bar { background: #007bff; color: white; padding: 22px 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-        .back-to-list-btn { background: rgba(255,255,255,0.25); color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1px solid white; }
-        .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f8f9fa; }
-        .chat-msg { max-width: 75%; padding: 10px 14px; border-radius: 8px; font-size: 14px; word-break: break-word; display: flex; flex-direction: column; gap: 4px; }
-        .chat-msg.sent { background-color: #007bff; color: white; align-self: flex-end; }
-        .chat-msg.received { background-color: #e2e8f0; color: #333; align-self: flex-start; }
-        .chat-msg-delete-btn { background: rgba(0,0,0,0.2); color: white; border: none; border-radius: 4px; font-size: 10px; padding: 2px 6px; cursor: pointer; align-self: flex-end; }
-        .chat-input-area { display: flex; padding: 12px 16px; background: #fff; border-top: 1px solid #ddd; gap: 10px; flex-shrink: 0; align-items: center; }
-        .media-upload-btn { background: none; border: none; cursor: pointer; color: #007bff; display: flex; align-items: center; justify-content: center; padding: 4px; }
+        #chatRoomView { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: #0f172a; z-index: 1500; display: flex; flex-direction: column; overflow: hidden; }
+        .chat-header-bar { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 18px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .back-to-list-btn { background: rgba(255,255,255,0.2); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; backdrop-filter: blur(10px); }
+        .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8); }
+        
+        .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #0f172a; }
+        .chat-msg { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 14px; word-break: break-word; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .chat-msg.sent { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-msg.received { background: #1e293b; color: #f8fafc; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #334155; }
+        .chat-msg-delete-btn { background: rgba(0,0,0,0.3); color: white; border: none; border-radius: 4px; font-size: 10px; padding: 3px 8px; cursor: pointer; align-self: flex-end; }
+        
+        .chat-input-area { display: flex; padding: 12px 16px; background: #1e293b; border-top: 1px solid #334155; gap: 10px; flex-shrink: 0; align-items: center; }
+        .media-upload-btn { background: none; border: none; cursor: pointer; color: #818cf8; display: flex; align-items: center; justify-content: center; padding: 4px; }
         .media-upload-btn svg { width: 24px; height: 24px; fill: currentColor; }
         
-        .chat-media-img { max-width: 200px; max-height: 200px; border-radius: 6px; object-fit: cover; margin-top: 4px; cursor: pointer; }
-        .chat-media-video { max-width: 220px; max-height: 180px; border-radius: 6px; margin-top: 4px; background: #000; cursor: pointer; }
+        .chat-media-img { max-width: 200px; max-height: 200px; border-radius: 8px; object-fit: cover; margin-top: 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
+        .chat-media-video { max-width: 220px; max-height: 180px; border-radius: 8px; margin-top: 4px; background: #000; cursor: pointer; }
 
         #mediaFullscreenModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
@@ -119,9 +123,8 @@
         .fullscreen-close-btn {
             position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); color: white;
             border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; transition: background 0.2s;
+            display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px);
         }
-        .fullscreen-close-btn:hover { background: rgba(255, 255, 255, 0.4); }
     </style>
 </head>
 <body>
@@ -207,12 +210,12 @@
     <div class="main-container">
         <div id="contactsSection" class="section-view">
             <div id="contactsListContainer" class="scrollable-list">
-                <p style="text-align: center; color: #777; padding: 20px;">Loading contacts...</p>
+                <p style="text-align: center; color: #94a3b8; padding: 20px;">Loading contacts...</p>
             </div>
         </div>
         <div id="inboxSection" class="section-view hidden">
             <div id="inboxListContainer" class="scrollable-list">
-                <p style="text-align: center; color: #777; padding: 20px;">No messages in inbox.</p>
+                <p style="text-align: center; color: #94a3b8; padding: 20px;">No messages in inbox.</p>
             </div>
         </div>
     </div>
@@ -222,8 +225,8 @@
             <button type="button" class="back-to-list-btn" id="backToListBtn">← Back</button>
             <img id="chatHeaderAvatar" class="chat-header-avatar" src="" alt="DP">
             <div style="display:flex; flex-direction:column; overflow:hidden;">
-                <span id="chatRoomTitle" style="font-size: 16px; font-weight: bold; white-space: nowrap;">Chat</span>
-                <span id="chatReceiverLastSeen" style="font-size: 11px; color: #e2e8f0;">online</span>
+                <span id="chatRoomTitle" style="font-size: 15px; font-weight: bold; white-space: nowrap;">Chat</span>
+                <span id="chatReceiverLastSeen" style="font-size: 11px; color: #cbd5e1;">online</span>
             </div>
         </div>
         <div id="chatMessagesBox" class="chat-messages"></div>
@@ -232,8 +235,8 @@
                 <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
                 <input type="file" id="chatMediaInput" style="display: none;">
             </label>
-            <input type="text" id="chatMessageInput" placeholder="Type a message..." style="margin-bottom:0; flex:1; padding: 10px 14px; border:1px solid #ccc; border-radius:6px; outline:none; font-size:15px;">
-            <button type="button" id="sendChatBtn" class="form-submit" style="width:auto; margin-bottom:0; padding: 10px 18px;">Send</button>
+            <input type="text" id="chatMessageInput" placeholder="Type a message..." style="margin-bottom:0; flex:1; padding: 12px 14px; border:1px solid #334155; border-radius:10px; outline:none; font-size:14px; background:#0f172a; color:white;">
+            <button type="button" id="sendChatBtn" class="form-submit" style="width:auto; margin-bottom:0; padding: 12px 18px; border-radius:10px;">Send</button>
         </div>
     </div>
 
@@ -251,12 +254,12 @@
 
     <div id="profileEditOverlay" class="fullscreen-overlay hidden">
         <div class="fullscreen-form-box">
-            <h2 style="margin-top:0; color:#007bff; text-align:center; font-size: 22px;">Edit Profile</h2>
+            <h2 style="margin-top:0; color:#818cf8; text-align:center; font-size: 20px;">Edit Profile</h2>
             <form id="profileEditForm">
                 <div style="text-align: center; margin-bottom: 12px;">
-                    <img id="editCurrentAvatarPreview" src="" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff;" alt="DP">
+                    <img id="editCurrentAvatarPreview" src="" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #6366f1;" alt="DP">
                 </div>
-                <input type="text" id="editUsernameInput" class="auth-input" disabled style="background:#e9ecef; color:#666;">
+                <input type="text" id="editUsernameInput" class="auth-input" disabled style="background:#0f172a; color:#94a3b8;">
                 <select id="editGender" class="auth-input" required>
                     <option value="" disabled>Select Gender</option>
                     <option value="Male">Male</option>
@@ -273,7 +276,7 @@
                     <option value="Canada">Canada</option>
                     <option value="Other">Other</option>
                 </select>
-                <label style="font-size: 13px; font-weight: bold; color: #444; margin-bottom: 6px; display: block;">Change Avatar:</label>
+                <label style="font-size: 13px; font-weight: bold; color: #cbd5e1; margin-bottom: 6px; display: block;">Change Avatar:</label>
                 <div class="avatar-options-grid" id="editAvatarOptionsGrid">
                     <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="edit-avatar-option-item avatar-option-item selected" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" alt="Av1">
                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="edit-avatar-option-item avatar-option-item" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Av2">
@@ -282,8 +285,8 @@
                 </div>
                 <button type="submit" class="form-submit">Save Changes</button>
             </form>
-            <button type="button" id="profileLogoutBtn" class="form-submit" style="background-color: #dc3545; margin-bottom: 8px;">Logout</button>
-            <button type="button" id="closeProfileModalBtn" class="form-submit" style="background-color: #6c757d; margin-bottom: 0;">Cancel</button>
+            <button type="button" id="profileLogoutBtn" class="form-submit" style="background: #f43f5e; margin-bottom: 8px;">Logout</button>
+            <button type="button" id="closeProfileModalBtn" class="form-submit" style="background: #334155; margin-bottom: 0;">Cancel</button>
         </div>
     </div>
 
@@ -305,7 +308,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Local Persistence සැකසීම (පැය ගණනක්/දින ගණනක් ගියද ලොග් වී තිබීමට)
         setPersistence(auth, browserLocalPersistence).catch((error) => {
             console.error("Persistence error:", error);
         });
@@ -352,7 +354,6 @@
         }
 
         const landingRegisterExtraFields = document.getElementById('landingRegisterExtraFields');
-        const landingEmailField = document.getElementById('landingEmail');
         const landingMainHeading = document.getElementById('landingMainHeading');
         const landingMainDesc = document.getElementById('landingMainDesc');
         const landingSubmitBtn = document.getElementById('landingSubmitBtn');
@@ -415,7 +416,6 @@
         }
         setInterval(updateLastSeenStatus, 30000);
 
-        // Firebase Auth State Listener (දත්ත සෙවීමේ ගැටළු මඟහරවා ඇත)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 try {
@@ -441,8 +441,6 @@
                         bottomNav.classList.remove('hidden');
                         updateLastSeenStatus();
                         startGlobalDataListener();
-                    } else {
-                        console.log("User document syncing...");
                     }
                 } catch (err) {
                     console.error("Auth state error:", err);
@@ -588,14 +586,14 @@
             let groupAvatar = "https://api.dicebear.com/7.x/identicon/svg?seed=NexusCommunity";
             
             contactsListContainer.innerHTML += `
-                <div class="list-card-item" style="background: #e6f2ff;" onclick="openGroupChatRoom()">
+                <div class="list-card-item" style="background: rgba(99,102,241,0.15);" onclick="openGroupChatRoom()">
                     <img src="${groupAvatar}" class="item-avatar" alt="Group DP">
                     <div class="item-info">
                         <div class="item-title-wrapper">
-                            <h4 class="item-title" style="color: #007bff;">Nexus Community Group</h4>
-                            <span class="item-meta-tag" style="background: #007bff; color: white;">Public</span>
+                            <h4 class="item-title" style="color: #818cf8;">Nexus Community Group</h4>
+                            <span class="item-meta-tag" style="background: #4f46e5; color: white;">Public</span>
                         </div>
-                        <p class="item-sub" style="font-weight: bold; color: #333;">Public Group Chat (Tap to join)</p>
+                        <p class="item-sub" style="font-weight: bold; color: #cbd5e1;">Public Group Chat (Tap to join)</p>
                     </div>
                 </div>`;
 
@@ -730,7 +728,7 @@
                     } else {
                         contentHTML = `<span>${m.text}</span>`;
                     }
-                    box.innerHTML += `<div class="chat-msg ${isMyMsg ? 'sent' : 'received'}"><span style="font-size: 11px; font-weight: bold;">${m.sender}</span>${contentHTML}${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', true)">Delete</button>` : ''}</div>`;
+                    box.innerHTML += `<div class="chat-msg ${isMyMsg ? 'sent' : 'received'}"><span style="font-size: 11px; font-weight: bold; color: #818cf8;">${m.sender}</span>${contentHTML}${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', true)">Delete</button>` : ''}</div>`;
                 });
                 box.scrollTop = box.scrollHeight;
             });
