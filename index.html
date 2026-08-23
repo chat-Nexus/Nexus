@@ -34,19 +34,23 @@
         .landing-container { max-width: 460px; width: 100%; display: flex; flex-direction: column; align-items: center; margin: auto; padding: 15px 0; }
         .nexus-brand-tag { font-size: 12px; text-transform: uppercase; letter-spacing: 3px; background: rgba(255, 255, 255, 0.15); padding: 6px 18px; border-radius: 20px; margin-bottom: 12px; font-weight: bold; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); }
         .landing-title { font-size: 32px; margin: 0 0 8px 0; font-weight: 900; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .landing-desc { font-size: 14px; margin: 0 0 16px 0; opacity: 0.9; line-height: 1.5; }
+        .landing-desc { font-size: 14px; margin: 0 0 24px 0; opacity: 0.9; line-height: 1.5; }
         .landing-card { width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 26px 22px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: left; color: #1e293b; }
         
         .landing-input, .landing-select { width: 100%; padding: 12px 14px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 14px; background: #f8fafc; color: #1e293b; outline: none; transition: all 0.3s; }
         .landing-input:focus, .landing-select:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,0.15); background: #ffffff; }
         
-        .landing-avatar-grid { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 15px; }
-        .landing-avatar-item { width: 48px; height: 48px; border-radius: 50%; cursor: pointer; border: 2px solid #cbd5e1; object-fit: cover; background: #f1f5f9; transition: all 0.2s; }
-        .landing-avatar-item.selected { border-color: #6366f1; transform: scale(1.1); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
+        .landing-avatar-grid { display: flex; justify-content: space-around; gap: 12px; margin-bottom: 20px; }
+        .landing-avatar-item { width: 64px; height: 64px; border-radius: 50%; cursor: pointer; border: 3px solid #cbd5e1; object-fit: cover; background: #f1f5f9; transition: all 0.2s; }
+        .landing-avatar-item.selected { border-color: #4f46e5; transform: scale(1.12); box-shadow: 0 6px 16px rgba(79,70,229,0.4); }
 
-        .landing-submit-btn { width: 100%; padding: 13px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(79,70,229,0.4); transition: opacity 0.2s; }
+        .landing-submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(79,70,229,0.4); transition: opacity 0.2s; }
         .landing-submit-btn:hover { opacity: 0.9; }
-        .landing-switch-text { text-align: center; margin-top: 15px; font-size: 13px; color: #64748b; cursor: pointer; font-weight: 500; }
+        
+        .chat-now-hero-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #4f46e5 0%, #db2777 100%); color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 25px rgba(79,70,229,0.5); text-transform: uppercase; letter-spacing: 1px; transition: transform 0.2s; }
+        .chat-now-hero-btn:hover { transform: translateY(-2px); }
+
+        .landing-switch-text { text-align: center; margin-top: 16px; font-size: 13px; color: #64748b; cursor: pointer; font-weight: 500; }
         .landing-switch-text span { color: #4f46e5; text-decoration: underline; font-weight: bold; }
 
         .brand-header { flex-shrink: 0; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 6px 20px rgba(0,0,0,0.25); z-index: 100; }
@@ -143,43 +147,63 @@
     <div id="landingPageView" class="hidden">
         <div class="landing-container">
             <div class="nexus-brand-tag">Welcome to Nexus Chat</div>
-            <h1 class="landing-title" id="landingMainHeading">Create Account</h1>
+            <h1 class="landing-title" id="landingMainHeading">Nexus Live Chat</h1>
             <p class="landing-desc" id="landingMainDesc">Connect with friends instantly, chat in real-time, and join global community spaces effortlessly.</p>
             
-            <div class="landing-card">
-                <form id="landingAuthForm">
-                    <input type="text" id="landingUsername" class="landing-input" placeholder="Username" required>
-                    <input type="email" id="landingEmail" class="landing-input" placeholder="Email Address (e.g., user@gmail.com)" required>
-                    <input type="password" id="landingPassword" class="landing-input" placeholder="Password (min 6 characters)" required>
-                    
-                    <div id="landingRegisterExtraFields">
-                        <select id="landingGender" class="landing-select" required>
-                            <option value="" disabled selected>Select Gender</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <select id="landingCountry" class="landing-select" required>
-                            <option value="" disabled selected>Select Country</option>
-                            <option value="Sri Lanka">Sri Lanka</option>
-                            <option value="India">India</option>
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="Australia">Australia</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Other">Other</option>
-                        </select>
-                        <label style="font-size: 12px; font-weight: bold; margin-bottom: 6px; display: block; color: #475569;">Choose Avatar:</label>
-                        <div class="landing-avatar-grid" id="landingAvatarOptionsGrid">
-                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="landing-avatar-item selected" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" alt="Av1">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Av2">
-                            <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bandit" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Bandit" alt="Av3">
-                            <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile" alt="Av4">
-                        </div>
-                    </div>
-                    <button type="submit" id="landingSubmitBtn" class="landing-submit-btn">Register Now</button>
+            <div class="landing-card" id="landingCardBox">
+                <!-- මුල් අවස්ථාව -->
+                <div id="landingInitialView">
+                    <button type="button" id="chatNowHeroBtn" class="chat-now-hero-btn">Chat Now</button>
+                    <div class="landing-switch-text" id="goToLoginText">Already have an account? <span>Login here</span></div>
+                </div>
+
+                <!-- Login වන View එක (Username & Password පමණි) -->
+                <form id="landingLoginForm" class="hidden">
+                    <h3 style="margin-top:0; color:#1e293b; margin-bottom: 15px; font-size:18px;">Login to Account</h3>
+                    <input type="text" id="loginUsernameInput" class="landing-input" placeholder="Username" required>
+                    <input type="password" id="loginPasswordInput" class="landing-input" placeholder="Password" required>
+                    <button type="submit" class="landing-submit-btn">Login Now</button>
+                    <div class="landing-switch-text" id="backToInitialFromLogin">← Back</div>
                 </form>
-                <div class="landing-switch-text" id="landingSwitchText">Already have an account? <span>Login</span></div>
+
+                <!-- Step 1: Avatar DP -->
+                <div id="landingAvatarStep" class="hidden">
+                    <h3 style="margin-top:0; color:#1e293b; margin-bottom: 8px; font-size:18px; text-align:center;">Choose Your DP</h3>
+                    <p style="text-align:center; font-size:12px; color:#64748b; margin-bottom:15px;">Select an avatar profile picture below:</p>
+                    <div class="landing-avatar-grid" id="landingAvatarOptionsGrid">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="landing-avatar-item selected" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" alt="Av1">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" alt="Av2">
+                        <img src="https://api.dicebear.com/7.x/adventurer/svg?seed=Bandit" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/adventurer/svg?seed=Bandit" alt="Av3">
+                        <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile" class="landing-avatar-item" data-url="https://api.dicebear.com/7.x/fun-emoji/svg?seed=Smile" alt="Av4">
+                    </div>
+                    <button type="button" id="proceedToRegisterDetailsBtn" class="landing-submit-btn">Continue</button>
+                    <div class="landing-switch-text" id="backToInitialFromAvatar">← Back</div>
+                </div>
+
+                <!-- Step 2: Register Details (Email ඉවත් කර ඇත) -->
+                <form id="landingRegisterDetailsForm" class="hidden">
+                    <h3 style="margin-top:0; color:#1e293b; margin-bottom: 12px; font-size:18px; text-align:center;">Enter Your Details</h3>
+                    <input type="text" id="landingUsername" class="landing-input" placeholder="Username" required>
+                    <input type="password" id="landingPassword" class="landing-input" placeholder="Password (min 6 characters)" required>
+                    <select id="landingGender" class="landing-select" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <select id="landingCountry" class="landing-select" required>
+                        <option value="" disabled selected>Select Country</option>
+                        <option value="Sri Lanka">Sri Lanka</option>
+                        <option value="India">India</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button type="submit" id="landingSubmitBtn" class="landing-submit-btn">Register & Start Chat</button>
+                    <div class="landing-switch-text" id="backToAvatarStepBtn">← Back to Avatars</div>
+                </form>
             </div>
         </div>
     </div>
@@ -292,7 +316,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc, serverTimestamp, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -313,7 +337,7 @@
         });
 
         let currentUsername = null, currentUserDocId = null, currentUserData = null;
-        let isLandingRegistering = true, activeChatReceiver = null, isGroupChatActive = false, currentTab = 'contacts';
+        let activeChatReceiver = null, isGroupChatActive = false, currentTab = 'contacts';
         let searchQuery = '', selectedGenderFilter = 'All';
         let selectedAvatarUrl = "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
         let editSelectedAvatarUrl = "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
@@ -353,27 +377,39 @@
             mediaFullscreenModal.classList.remove('hidden');
         }
 
-        const landingRegisterExtraFields = document.getElementById('landingRegisterExtraFields');
-        const landingMainHeading = document.getElementById('landingMainHeading');
-        const landingMainDesc = document.getElementById('landingMainDesc');
-        const landingSubmitBtn = document.getElementById('landingSubmitBtn');
-        const landingSwitchText = document.getElementById('landingSwitchText');
+        const landingInitialView = document.getElementById('landingInitialView');
+        const landingLoginForm = document.getElementById('landingLoginForm');
+        const landingAvatarStep = document.getElementById('landingAvatarStep');
+        const landingRegisterDetailsForm = document.getElementById('landingRegisterDetailsForm');
 
-        landingSwitchText.addEventListener('click', () => {
-            isLandingRegistering = !isLandingRegistering;
-            if (isLandingRegistering) {
-                landingMainHeading.textContent = "Create Account";
-                landingMainDesc.textContent = "Connect with friends instantly, chat in real-time, and join global community spaces effortlessly.";
-                landingSubmitBtn.textContent = "Register Now";
-                landingRegisterExtraFields.classList.remove('hidden');
-                landingSwitchText.innerHTML = "Already have an account? <span>Login</span>";
-            } else {
-                landingMainHeading.textContent = "Welcome Back";
-                landingMainDesc.textContent = "Log in to your account and continue your conversations seamlessly.";
-                landingSubmitBtn.textContent = "Login Now";
-                landingRegisterExtraFields.classList.add('hidden');
-                landingSwitchText.innerHTML = "Don't have an account? <span>Register</span>";
-            }
+        document.getElementById('chatNowHeroBtn').addEventListener('click', () => {
+            landingInitialView.classList.add('hidden');
+            landingAvatarStep.classList.remove('hidden');
+        });
+
+        document.getElementById('goToLoginText').addEventListener('click', () => {
+            landingInitialView.classList.add('hidden');
+            landingLoginForm.classList.remove('hidden');
+        });
+
+        document.getElementById('backToInitialFromLogin').addEventListener('click', () => {
+            landingLoginForm.classList.add('hidden');
+            landingInitialView.classList.remove('hidden');
+        });
+
+        document.getElementById('backToInitialFromAvatar').addEventListener('click', () => {
+            landingAvatarStep.classList.add('hidden');
+            landingInitialView.classList.remove('hidden');
+        });
+
+        document.getElementById('proceedToRegisterDetailsBtn').addEventListener('click', () => {
+            landingAvatarStep.classList.add('hidden');
+            landingRegisterDetailsForm.classList.remove('hidden');
+        });
+
+        document.getElementById('backToAvatarStepBtn').addEventListener('click', () => {
+            landingRegisterDetailsForm.classList.add('hidden');
+            landingAvatarStep.classList.remove('hidden');
         });
 
         document.querySelectorAll('#landingAvatarOptionsGrid .landing-avatar-item').forEach(img => {
@@ -423,7 +459,7 @@
                     let found = false;
                     usersSnap.forEach(d => {
                         let data = d.data();
-                        if (data.email === user.email || data.uid === user.uid) {
+                        if (data.uid === user.uid) {
                             found = true;
                             currentUserDocId = d.id;
                             currentUsername = data.username;
@@ -459,65 +495,90 @@
             bottomNav.classList.add('hidden');
         }
 
-        document.getElementById('landingAuthForm').addEventListener('submit', async (e) => {
+        // Login Handler (Username & Password පමණක් පාවිච්චි කරමින් Firebase Authentication වෙත ලොග් වීම)
+        document.getElementById('landingLoginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const usernameInput = document.getElementById('landingUsername').value.trim().toLowerCase();
-            const emailInput = document.getElementById('landingEmail').value.trim();
-            const passwordInput = document.getElementById('landingPassword').value;
+            const usernameInput = document.getElementById('loginUsernameInput').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('loginPasswordInput').value;
 
             try {
-                if (isLandingRegistering) {
-                    const genderInput = document.getElementById('landingGender').value;
-                    const countryInput = document.getElementById('landingCountry').value;
-
-                    const usersSnap = await getDocs(collection(db, "users"));
-                    let usernameTaken = false;
-                    usersSnap.forEach(d => {
-                        if (d.data().username === usernameInput) usernameTaken = true;
-                    });
-
-                    if (usernameTaken) {
-                        alert("Username already taken! Please choose another.");
-                        return;
+                const usersSnap = await getDocs(collection(db, "users"));
+                let userEmail = null;
+                usersSnap.forEach(d => {
+                    let data = d.data();
+                    if (data.username === usernameInput) {
+                        userEmail = data.email;
                     }
+                });
 
-                    const userCredential = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
-                    
-                    const docRef = await addDoc(collection(db, "users"), {
-                        uid: userCredential.user.uid,
-                        username: usernameInput,
-                        email: emailInput,
-                        gender: genderInput,
-                        country: countryInput,
-                        avatarUrl: selectedAvatarUrl,
-                        password: passwordInput,
-                        createdAt: serverTimestamp(),
-                        lastSeen: serverTimestamp()
-                    });
-
-                    currentUserDocId = docRef.id;
-                    currentUsername = usernameInput;
-                    currentUserData = {
-                        uid: userCredential.user.uid,
-                        username: usernameInput,
-                        email: emailInput,
-                        gender: genderInput,
-                        country: countryInput,
-                        avatarUrl: selectedAvatarUrl
-                    };
-
-                    alert("Account created successfully!");
-                    landingPageView.classList.add('hidden');
-                    headerUsernameText.textContent = currentUsername;
-                    searchBarContainer.classList.remove('hidden');
-                    bottomNav.classList.remove('hidden');
-                    updateLastSeenStatus();
-                    startGlobalDataListener();
-                } else {
-                    await signInWithEmailAndPassword(auth, emailInput, passwordInput);
+                if (!userEmail) {
+                    alert("Username not found!");
+                    return;
                 }
+
+                await signInWithEmailAndPassword(auth, userEmail, passwordInput);
             } catch (error) {
-                alert("Authentication Error: " + error.message);
+                alert("Login Error: " + error.message);
+            }
+        });
+
+        // Register Handler (අභ්‍යන්තරව dummy email එකක් සාදාගෙන username සහ password පමණක් මගින් රෙජිස්ටර් වීම)
+        document.getElementById('landingRegisterDetailsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usernameInput = document.getElementById('landingUsername').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('landingPassword').value;
+            const genderInput = document.getElementById('landingGender').value;
+            const countryInput = document.getElementById('landingCountry').value;
+
+            try {
+                const usersSnap = await getDocs(collection(db, "users"));
+                let usernameTaken = false;
+                usersSnap.forEach(d => {
+                    if (d.data().username === usernameInput) usernameTaken = true;
+                });
+
+                if (usernameTaken) {
+                    alert("Username already taken! Please choose another.");
+                    return;
+                }
+
+                // ස්වයංක්‍රීයව අභ්‍යන්තර Firebase Auth සඳහා email එකක් සකස් කරනු ලැබේ
+                const dummyEmail = `${usernameInput}@nexuschat.local`;
+
+                const userCredential = await createUserWithEmailAndPassword(auth, dummyEmail, passwordInput);
+                
+                const docRef = await addDoc(collection(db, "users"), {
+                    uid: userCredential.user.uid,
+                    username: usernameInput,
+                    email: dummyEmail,
+                    gender: genderInput,
+                    country: countryInput,
+                    avatarUrl: selectedAvatarUrl,
+                    password: passwordInput,
+                    createdAt: serverTimestamp(),
+                    lastSeen: serverTimestamp()
+                });
+
+                currentUserDocId = docRef.id;
+                currentUsername = usernameInput;
+                currentUserData = {
+                    uid: userCredential.user.uid,
+                    username: usernameInput,
+                    email: dummyEmail,
+                    gender: genderInput,
+                    country: countryInput,
+                    avatarUrl: selectedAvatarUrl
+                };
+
+                alert("Account created successfully!");
+                landingPageView.classList.add('hidden');
+                headerUsernameText.textContent = currentUsername;
+                searchBarContainer.classList.remove('hidden');
+                bottomNav.classList.remove('hidden');
+                updateLastSeenStatus();
+                startGlobalDataListener();
+            } catch (error) {
+                alert("Registration Error: " + error.message);
             }
         });
 
