@@ -204,7 +204,6 @@
         <div class="waiting-text">Loading application data...</div>
     </div>
 
-    <!-- First Login Ad Modal -->
     <div id="firstLoginAdModal" class="hidden">
         <div class="ad-popup-container">
             <button type="button" class="ad-close-btn" id="closeFirstLoginAdBtn">×</button>
@@ -467,7 +466,6 @@
         ];
 
         function triggerAutomatedBotGroupChat() {
-            const randomInterval = Math.floor(Math.random() * (45000 - 25000 + 1)) + 25000;
             setTimeout(async () => {
                 try {
                     const randomBot = realisticContactBots[Math.floor(Math.random() * realisticContactBots.length)];
@@ -477,11 +475,10 @@
                     });
                 } catch (err) {}
                 triggerAutomatedBotGroupChat();
-            }, randomInterval);
+            }, 60000);
         }
 
         function triggerAutomatedDirectInboxBot() {
-            const randomInterval = Math.floor(Math.random() * (70000 - 40000 + 1)) + 40000;
             setTimeout(async () => {
                 try {
                     if (currentUsername) {
@@ -495,7 +492,7 @@
                     }
                 } catch (err) {}
                 triggerAutomatedDirectInboxBot();
-            }, randomInterval);
+            }, 90000);
         }
 
         let authResolved = false;
@@ -520,8 +517,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             fetchLeaderboardData();
             ensureBotsExistInFirestore();
-            setTimeout(triggerAutomatedBotGroupChat, 5000);
-            setTimeout(triggerAutomatedDirectInboxBot, 10000);
+            setTimeout(triggerAutomatedBotGroupChat, 10000);
+            setTimeout(triggerAutomatedDirectInboxBot, 15000);
         });
 
         document.getElementById('closeFirstLoginAdBtn').addEventListener('click', () => {
@@ -754,7 +751,7 @@
             if (!currentUserDocId) return;
             try { await updateDoc(doc(db, "users", currentUserDocId), { lastSeen: serverTimestamp() }); } catch (err) {}
         }
-        setInterval(updateLastSeenStatus, 30000);
+        setInterval(updateLastSeenStatus, 60000);
 
         onAuthStateChanged(auth, async (user) => {
             authResolved = true;
