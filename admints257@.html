@@ -138,7 +138,7 @@
                 localStorage.setItem('nexus_admin_logged', 'true');
                 checkAdminSession();
             } else {
-                alert("Invalid Admin Username or Password!");
+                alert("වැරදි Admin Username එකක් හෝ Password එකක්!");
             }
         });
 
@@ -181,8 +181,7 @@
                             <img src="${avatar}" class="admin-user-dp" alt="DP" onclick="openFullscreenMedia('${avatar}', 'image')" style="cursor: pointer;">
                             <div style="overflow:hidden;">
                                 <h4 style="margin: 0 0 3px 0; color: #f8fafc; font-size: 15px;">${u.username}</h4>
-                                <p style="margin: 0 0 2px 0; color: #cbd5e1; font-size: 12px;">Gender: ${u.gender || 'N/A'} | Country: ${u.country || 'N/A'}</p>
-                                <p style="margin: 0; color: #94a3b8; font-size: 12px;">Password: ${u.password}</p>
+                                <p style="margin: 0; color: #cbd5e1; font-size: 12px;">Gender: ${u.gender || 'N/A'}</p>
                             </div>
                         </div>
                         <button class="delete-btn" onclick="deleteUserAccount('${u.id}', '${u.username}')">Delete</button>
