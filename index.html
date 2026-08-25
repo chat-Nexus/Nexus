@@ -76,7 +76,8 @@
         .nav-item { background: none; border: none; color: #94a3b8; font-size: 11px; font-weight: bold; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; position: relative; transition: color 0.2s; }
         .nav-item.active { color: #818cf8; }
         .nav-icon { width: 22px; height: 22px; fill: currentColor; }
-        .nav-notification-dot { position: absolute; top: 0; right: 28%; width: 8px; height: 8px; background-color: #f43f5e; border-radius: 50%; display: none; }
+        
+        .nav-notification-dot { position: absolute; top: -2px; right: 26%; width: 12px; height: 12px; background-color: #d946ef; border-radius: 50%; display: none; border: 2px solid #1e293b; box-shadow: 0 0 8px #d946ef; }
         .nav-notification-dot.show { display: block; }
 
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px); z-index: 2000; display: flex; justify-content: center; align-items: center; padding: 15px; }
@@ -91,7 +92,13 @@
 
         .list-card-item { padding: 14px 16px; background: #1e293b; border-bottom: 1px solid #334155; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: background 0.2s; }
         .list-card-item:hover { background: #334155; }
-        .item-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; margin-right: 14px; flex-shrink: 0; background: #334155; border: 2px solid rgba(255,255,255,0.1); }
+        
+        .item-avatar-wrapper { position: relative; margin-right: 14px; flex-shrink: 0; }
+        .item-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #334155; border: 2px solid rgba(255,255,255,0.1); display: block; }
+        
+        .unread-badge-dot { position: absolute; top: -2px; right: -2px; width: 15px; height: 15px; background-color: #d946ef; border-radius: 50%; border: 3px solid #1e293b; display: none; box-shadow: 0 0 10px #d946ef; z-index: 10; }
+        .unread-badge-dot.show { display: block; }
+
         .item-info { flex-grow: 1; overflow: hidden; }
         .item-title-wrapper { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; flex-wrap: wrap; }
         .item-title { font-weight: bold; color: #f8fafc; font-size: 15px; margin: 0; }
@@ -106,17 +113,57 @@
         .chat-header-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.8); }
         
         .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #0f172a; }
-        .chat-msg { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 14px; word-break: break-word; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .chat-msg.sent { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-msg.received { background: #1e293b; color: #f8fafc; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #334155; }
+        
+        .chat-msg-wrapper { display: flex; flex-direction: column; width: 100%; position: relative; transition: transform 0.2s ease; }
+        .chat-msg-wrapper.sent { align-items: flex-end; }
+        .chat-msg-wrapper.received { align-items: flex-start; }
+
+        .chat-msg { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 14px; word-break: break-word; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; touch-action: pan-y; }
+        .chat-msg.sent { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border-bottom-right-radius: 4px; }
+        .chat-msg.received { background: #1e293b; color: #f8fafc; border-bottom-left-radius: 4px; border: 1px solid #334155; }
         .chat-msg-delete-btn { background: rgba(0,0,0,0.3); color: white; border: none; border-radius: 4px; font-size: 10px; padding: 3px 8px; cursor: pointer; align-self: flex-end; }
         
+        .msg-reply-preview { background: rgba(0, 0, 0, 0.25); border-left: 3px solid #818cf8; padding: 6px 10px; border-radius: 6px; font-size: 12px; margin-bottom: 4px; color: #e2e8f0; }
+        .msg-reply-preview .reply-author { font-weight: bold; color: #818cf8; display: block; margin-bottom: 2px; }
+
+        .msg-footer { display: flex; justify-content: flex-end; align-items: center; gap: 4px; font-size: 10px; margin-top: 2px; opacity: 0.8; }
+        .msg-ticks { font-weight: bold; letter-spacing: -2px; }
+        .msg-ticks.read { color: #60a5fa; }
+        .msg-ticks.delivered { color: #cbd5e1; }
+
+        #activeReplyContainer { background: #1e293b; border-left: 4px solid #6366f1; padding: 8px 12px; display: none; justify-content: space-between; align-items: center; font-size: 13px; color: white; border-top: 1px solid #334155; }
+        #activeReplyContainer.show { display: flex; }
+
         .chat-input-area { display: flex; padding: 12px 16px; background: #1e293b; border-top: 1px solid #334155; gap: 10px; flex-shrink: 0; align-items: center; }
-        .media-upload-btn { background: none; border: none; cursor: pointer; color: #818cf8; display: flex; align-items: center; justify-content: center; padding: 4px; }
-        .media-upload-btn svg { width: 24px; height: 24px; fill: currentColor; }
+        .media-upload-btn, .game-toggle-btn { background: none; border: none; cursor: pointer; color: #818cf8; display: flex; align-items: center; justify-content: center; padding: 4px; }
+        .media-upload-btn svg, .game-toggle-btn svg { width: 24px; height: 24px; fill: currentColor; }
         
         .chat-media-img { max-width: 200px; max-height: 200px; border-radius: 8px; object-fit: cover; margin-top: 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
         .chat-media-video { max-width: 220px; max-height: 180px; border-radius: 8px; margin-top: 4px; background: #000; cursor: pointer; }
+
+        #groupLeaderboardBox {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-bottom: 2px solid #6366f1;
+            padding: 14px 18px;
+            display: none;
+            box-shadow: inset 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+        #groupLeaderboardList { display: flex; flex-direction: column; gap: 6px; }
+        .lb-item { display: flex; justify-content: space-between; font-size: 14px; padding: 8px 14px; background: rgba(15, 23, 42, 0.8); border-radius: 8px; color: #e2e8f0; align-items: center; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .lb-item.top-1 { background: linear-gradient(90deg, rgba(251, 191, 36, 0.2) 0%, rgba(15, 23, 42, 0.8) 100%); color: #fbbf24; font-weight: bold; border-color: rgba(251, 191, 36, 0.5); font-size: 15px; }
+        .lb-item.top-2 { background: linear-gradient(90deg, rgba(226, 232, 240, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%); color: #f1f5f9; font-weight: bold; border-color: rgba(226, 232, 240, 0.4); }
+        .lb-item.top-3 { background: linear-gradient(90deg, rgba(217, 119, 6, 0.15) 0%, rgba(15, 23, 42, 0.8) 100%); color: #fb923c; font-weight: bold; border-color: rgba(217, 119, 6, 0.4); }
+
+        #gameModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: rgba(0,0,0,0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; padding: 10px; }
+        #gameModal.hidden { display: none !important; }
+        .game-box { background: #1e293b; border: 1px solid #334155; padding: 18px; border-radius: 20px; text-align: center; color: white; width: 100%; max-width: 380px; max-height: 95vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .user-best-score { font-size: 12px; background: rgba(129, 140, 248, 0.15); color: #818cf8; padding: 6px; border-radius: 8px; margin-bottom: 10px; font-weight: bold; }
+        .game-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0; }
+        .game-card { width: 100%; aspect-ratio: 1; background: #334155; border-radius: 10px; font-size: 26px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: transform 0.2s, background 0.2s; user-select: none; }
+        .game-card.flipped { background: #4f46e5; transform: scale(1.05); }
+        .game-card.matched { background: #10b981; opacity: 0.8; cursor: default; }
+        .game-close-btn { background: #f43f5e; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 8px; width: 100%; }
 
         #mediaFullscreenModal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
@@ -139,6 +186,17 @@
         <div class="waiting-text">Loading application data...</div>
     </div>
 
+    <div id="gameModal" class="hidden">
+        <div class="game-box">
+            <h3 style="margin-top:0; color:#818cf8; margin-bottom: 6px;">Nexus Community Match</h3>
+            <div id="userBestScoreBadge" class="user-best-score">Your Best Score: 0 Moves</div>
+            <p id="gameStatus" style="font-size: 12px; color: #cbd5e1; margin-bottom: 8px;">Find all matching pairs with minimum moves!</p>
+            <div class="game-grid" id="memoryGameGrid"></div>
+            <button type="button" id="resetGameBtn" class="form-submit" style="margin-bottom: 6px;">Restart Game</button>
+            <button type="button" id="closeGameModalBtn" class="game-close-btn">Close Game</button>
+        </div>
+    </div>
+
     <div id="mediaFullscreenModal" class="hidden">
         <button type="button" class="fullscreen-close-btn" id="closeMediaModalBtn">×</button>
         <div id="fullscreenMediaContainer" style="display:flex; justify-content:center; align-items:center; width:100%; height:100%;"></div>
@@ -151,22 +209,10 @@
             <p class="landing-desc" id="landingMainDesc">Connect with friends instantly, chat in real-time, and join global community spaces effortlessly.</p>
             
             <div class="landing-card" id="landingCardBox">
-                <!-- මුල් අවස්ථාව -->
                 <div id="landingInitialView">
                     <button type="button" id="chatNowHeroBtn" class="chat-now-hero-btn">Chat Now</button>
-                    <div class="landing-switch-text" id="goToLoginText">Already have an account? <span>Login here</span></div>
                 </div>
 
-                <!-- Login වන View එක (Username & Password පමණි) -->
-                <form id="landingLoginForm" class="hidden">
-                    <h3 style="margin-top:0; color:#1e293b; margin-bottom: 15px; font-size:18px;">Login to Account</h3>
-                    <input type="text" id="loginUsernameInput" class="landing-input" placeholder="Username" required>
-                    <input type="password" id="loginPasswordInput" class="landing-input" placeholder="Password" required>
-                    <button type="submit" class="landing-submit-btn">Login Now</button>
-                    <div class="landing-switch-text" id="backToInitialFromLogin">← Back</div>
-                </form>
-
-                <!-- Step 1: Avatar DP -->
                 <div id="landingAvatarStep" class="hidden">
                     <h3 style="margin-top:0; color:#1e293b; margin-bottom: 8px; font-size:18px; text-align:center;">Choose Your DP</h3>
                     <p style="text-align:center; font-size:12px; color:#64748b; margin-bottom:15px;">Select an avatar profile picture below:</p>
@@ -180,28 +226,16 @@
                     <div class="landing-switch-text" id="backToInitialFromAvatar">← Back</div>
                 </div>
 
-                <!-- Step 2: Register Details (Email ඉවත් කර ඇත) -->
                 <form id="landingRegisterDetailsForm" class="hidden">
                     <h3 style="margin-top:0; color:#1e293b; margin-bottom: 12px; font-size:18px; text-align:center;">Enter Your Details</h3>
                     <input type="text" id="landingUsername" class="landing-input" placeholder="Username" required>
-                    <input type="password" id="landingPassword" class="landing-input" placeholder="Password (min 6 characters)" required>
                     <select id="landingGender" class="landing-select" required>
                         <option value="" disabled selected>Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                     </select>
-                    <select id="landingCountry" class="landing-select" required>
-                        <option value="" disabled selected>Select Country</option>
-                        <option value="Sri Lanka">Sri Lanka</option>
-                        <option value="India">India</option>
-                        <option value="United States">United States</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="Australia">Australia</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <button type="submit" id="landingSubmitBtn" class="landing-submit-btn">Register & Start Chat</button>
+                    <button type="submit" id="landingSubmitBtn" class="landing-submit-btn">Start Chat</button>
                     <div class="landing-switch-text" id="backToAvatarStepBtn">← Back to Avatars</div>
                 </form>
             </div>
@@ -248,12 +282,32 @@
         <div class="chat-header-bar">
             <button type="button" class="back-to-list-btn" id="backToListBtn">← Back</button>
             <img id="chatHeaderAvatar" class="chat-header-avatar" src="" alt="DP">
-            <div style="display:flex; flex-direction:column; overflow:hidden;">
+            <div style="display:flex; flex-direction:column; overflow:hidden; flex:1;">
                 <span id="chatRoomTitle" style="font-size: 15px; font-weight: bold; white-space: nowrap;">Chat</span>
                 <span id="chatReceiverLastSeen" style="font-size: 11px; color: #cbd5e1;">online</span>
             </div>
+            <button type="button" class="game-toggle-btn" id="openGameModalHeaderBtn" title="Play Memory Game">
+                <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 9 18.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </button>
         </div>
+
+        <div id="groupLeaderboardBox">
+            <div style="font-size: 13px; color: #818cf8; font-weight: 800; margin-bottom: 8px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">🏆 Community Game Top 3 Leaderboard</div>
+            <div id="groupLeaderboardList">
+                <div style="text-align:center; color:#94a3b8; font-size:12px;">Loading top scores...</div>
+            </div>
+        </div>
+
         <div id="chatMessagesBox" class="chat-messages"></div>
+        
+        <div id="activeReplyContainer">
+            <div>
+                <span id="activeReplyAuthor" style="font-weight: bold; font-size: 11px; color: #818cf8; display: block;">Replying to...</span>
+                <span id="activeReplyText" style="font-size: 12px; opacity: 0.9;">...</span>
+            </div>
+            <button type="button" id="cancelReplyBtn" style="background:none; border:none; color:white; font-size:16px; cursor:pointer; font-weight:bold;">×</button>
+        </div>
+
         <div class="chat-input-area">
             <label class="media-upload-btn" title="Send Image or Video">
                 <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
@@ -266,7 +320,7 @@
 
     <div class="bottom-nav" id="bottomNav">
         <button class="nav-item active" id="navContactsBtn">
-            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5 z"/></svg>
             Contacts
         </button>
         <button class="nav-item" id="navInboxBtn">
@@ -290,16 +344,6 @@
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
-                <select id="editCountry" class="auth-input" required>
-                    <option value="" disabled>Select Country</option>
-                    <option value="Sri Lanka">Sri Lanka</option>
-                    <option value="India">India</option>
-                    <option value="United States">United States</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Other">Other</option>
-                </select>
                 <label style="font-size: 13px; font-weight: bold; color: #cbd5e1; margin-bottom: 6px; display: block;">Change Avatar:</label>
                 <div class="avatar-options-grid" id="editAvatarOptionsGrid">
                     <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" class="edit-avatar-option-item avatar-option-item selected" data-url="https://api.dicebear.com/7.x/bottts/svg?seed=Felix" alt="Av1">
@@ -316,8 +360,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc, serverTimestamp, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, setDoc, doc, deleteDoc, serverTimestamp, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA0huAGXtGHRsRHtVivcLnG-yS3CD6t8Jo",
@@ -341,8 +385,10 @@
         let searchQuery = '', selectedGenderFilter = 'All';
         let selectedAvatarUrl = "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
         let editSelectedAvatarUrl = "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
+        let replyingToMessage = null;
+        let hasUnreadCommunityMessage = false;
 
-        let unsubscribeChat = null, unsubscribeGlobal = null;
+        let unsubscribeChat = null, unsubscribeGlobal = null, unsubscribeLeaderboard = null;
         let globalUsersSnap = null, globalChatsSnap = null, globalGroupChatsSnap = null;
 
         const waitingScreen = document.getElementById('waitingScreen');
@@ -358,9 +404,201 @@
         const searchInput = document.getElementById('searchInput');
         const searchBarContainer = document.getElementById('searchBarContainer');
         const bottomNav = document.getElementById('bottomNav');
+        const inboxNotificationDot = document.getElementById('inboxNotificationDot');
         
         const mediaFullscreenModal = document.getElementById('mediaFullscreenModal');
         const fullscreenMediaContainer = document.getElementById('fullscreenMediaContainer');
+
+        const prebuiltBots = [
+            { username: "sophia_meta", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia", isBot: true },
+            { username: "liam_ai", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Liam", isBot: true },
+            { username: "emma_chat", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma", isBot: true },
+            { username: "alex_ai", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Alex", isBot: true }
+        ];
+
+        let authResolved = false;
+        setTimeout(() => {
+            if (!authResolved && !currentUsername) {
+                waitingScreen.style.opacity = '0';
+                setTimeout(() => waitingScreen.classList.add('hidden'), 400);
+                showLandingPage();
+            }
+        }, 2500);
+
+        const gameModal = document.getElementById('gameModal');
+        const gameStatus = document.getElementById('gameStatus');
+        const memoryGameGrid = document.getElementById('memoryGameGrid');
+        const groupLeaderboardList = document.getElementById('groupLeaderboardList');
+        const groupLeaderboardBox = document.getElementById('groupLeaderboardBox');
+        const userBestScoreBadge = document.getElementById('userBestScoreBadge');
+        
+        const emojis = ["🚀", "💎", "🔥", "⚡", "🌟", "🐱", "🎯", "🍀"];
+        let cardList = [], flippedCards = [], matchedPairsCount = 0, moveCount = 0, isBoardLocked = false, userBestMoves = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchLeaderboardData();
+            ensureBotsExistInFirestore();
+        });
+
+        async function ensureBotsExistInFirestore() {
+            try {
+                const usersSnap = await getDocs(collection(db, "users"));
+                let existingUsernames = new Set();
+                usersSnap.forEach(d => existingUsernames.add(d.data().username));
+
+                for (let bot of prebuiltBots) {
+                    if (!existingUsernames.has(bot.username)) {
+                        await addDoc(collection(db, "users"), {
+                            uid: "bot_" + bot.username,
+                            username: bot.username,
+                            gender: bot.gender,
+                            avatarUrl: bot.avatarUrl,
+                            isBot: true,
+                            activeSessionId: "",
+                            createdAt: serverTimestamp(),
+                            lastSeen: serverTimestamp()
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error("Error setting up default bots:", e);
+            }
+        }
+
+        document.getElementById('cancelReplyBtn').addEventListener('click', () => {
+            replyingToMessage = null;
+            document.getElementById('activeReplyContainer').classList.remove('show');
+        });
+
+        window.openGroupChatRoom = async function() {
+            isGroupChatActive = true; activeChatReceiver = null;
+            replyingToMessage = null;
+            hasUnreadCommunityMessage = false;
+            
+            if (currentUsername) {
+                localStorage.setItem(`nexus_group_read_${currentUsername}`, Date.now().toString());
+            }
+
+            document.getElementById('activeReplyContainer').classList.remove('show');
+            document.getElementById('chatRoomTitle').textContent = "Nexus Community Group";
+            document.getElementById('chatHeaderAvatar').src = "https://api.dicebear.com/7.x/identicon/svg?seed=NexusCommunity";
+            
+            groupLeaderboardBox.style.display = "block";
+            chatRoomView.classList.remove('hidden');
+            renderCurrentView();
+
+            if(unsubscribeChat) unsubscribeChat();
+            unsubscribeChat = onSnapshot(query(collection(db, "groupChats"), orderBy("createdAt", "asc")), (snapshot) => {
+                let box = document.getElementById('chatMessagesBox');
+                box.innerHTML = "";
+                snapshot.forEach(d => {
+                    let m = d.data();
+                    let isMyMsg = m.sender === currentUsername;
+                    let contentHTML = m.mediaType === 'video' ? `<video src="${m.mediaUrl}" class="chat-media-video" onclick="openFullscreenMedia('${m.mediaUrl}', 'video')"></video>` : (m.mediaUrl ? `<img src="${m.mediaUrl}" class="chat-media-img" alt="Media" onclick="openFullscreenMedia('${m.mediaUrl}', 'image')">` : `<span>${m.text}</span>`);
+                    let replyHTML = m.replyTo ? `<div class="msg-reply-preview"><span class="reply-author">${m.replyTo.sender}</span><span>${m.replyTo.text || '[Media]'}</span></div>` : "";
+
+                    box.innerHTML += `
+                        <div class="chat-msg-wrapper ${isMyMsg ? 'sent' : 'received'}">
+                            <div class="chat-msg ${isMyMsg ? 'sent' : 'received'}" data-sender="${m.sender}" data-text="${m.text || (m.mediaType ? '[Media]' : '')}">
+                                <span style="font-size: 11px; font-weight: bold; color: #818cf8;">${m.sender}</span>
+                                ${replyHTML} ${contentHTML}
+                                ${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', true)">Delete</button>` : ''}
+                            </div>
+                        </div>`;
+                });
+                box.scrollTop = box.scrollHeight;
+                attachSwipeEvents();
+            });
+        }
+
+        document.getElementById('openGameModalHeaderBtn').addEventListener('click', () => {
+            initMemoryGame();
+            gameModal.classList.remove('hidden');
+        });
+        document.getElementById('closeGameModalBtn').addEventListener('click', () => gameModal.classList.add('hidden'));
+        document.getElementById('resetGameBtn').addEventListener('click', initMemoryGame);
+
+        function initMemoryGame() {
+            memoryGameGrid.innerHTML = "";
+            matchedPairsCount = 0; moveCount = 0; flippedCards = []; isBoardLocked = false;
+            gameStatus.textContent = "Moves: 0 | Find all matching pairs!";
+            cardList = [...emojis, [...emojis]].flat().sort(() => Math.random() - 0.5);
+            cardList.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.dataset.emoji = emoji; card.dataset.index = index; card.textContent = "?";
+                card.addEventListener('click', handleCardClick);
+                memoryGameGrid.appendChild(card);
+            });
+        }
+
+        function handleCardClick() {
+            if (isBoardLocked || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+            this.classList.add('flipped'); this.textContent = this.dataset.emoji;
+            flippedCards.push(this);
+            if (flippedCards.length === 2) {
+                moveCount++;
+                gameStatus.textContent = `Moves: ${moveCount} | Checking...`;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.emoji === card2.dataset.emoji) {
+                card1.classList.add('matched'); card2.classList.add('matched');
+                matchedPairsCount++; flippedCards = [];
+                gameStatus.textContent = `Moves: ${moveCount} | Match Found!`;
+                if (matchedPairsCount === emojis.length) {
+                    gameStatus.textContent = `🎉 Won in ${moveCount} moves!`;
+                    saveUserScore(moveCount);
+                }
+            } else {
+                isBoardLocked = true;
+                setTimeout(() => {
+                    card1.classList.remove('flipped'); card1.textContent = "?";
+                    card2.classList.remove('flipped'); card2.textContent = "?";
+                    flippedCards = []; isBoardLocked = false;
+                    gameStatus.textContent = `Moves: ${moveCount} | Keep going!`;
+                }, 800);
+            }
+        }
+
+        async function saveUserScore(moves) {
+            if (!currentUsername) return;
+            try {
+                const scoreRef = doc(db, "gameScores", currentUsername);
+                if (userBestMoves === null || moves < userBestMoves) {
+                    userBestMoves = moves;
+                    userBestScoreBadge.textContent = `Your Best Score: ${userBestMoves} Moves`;
+                }
+                await setDoc(scoreRef, { username: currentUsername, bestMoves: moves, updatedAt: serverTimestamp() }, { merge: true });
+                fetchLeaderboardData();
+            } catch (err) { console.error("Error saving score:", err); }
+        }
+
+        function fetchLeaderboardData() {
+            if(unsubscribeLeaderboard) unsubscribeLeaderboard();
+            unsubscribeLeaderboard = onSnapshot(collection(db, "gameScores"), (snapshot) => {
+                let scores = [];
+                snapshot.forEach(d => { let data = d.data(); if (data.username && data.bestMoves) scores.push(data); });
+                scores.sort((a, b) => a.bestMoves - b.bestMoves);
+                groupLeaderboardList.innerHTML = "";
+                if (scores.length === 0) {
+                    groupLeaderboardList.innerHTML = `<div style="text-align:center; color:#94a3b8; font-size:12px;">No scores yet. Be the first!</div>`;
+                    return;
+                }
+                scores.slice(0, 3).forEach((item, index) => {
+                    let rankClass = index === 0 ? "top-1" : index === 1 ? "top-2" : "top-3";
+                    let crown = index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉";
+                    groupLeaderboardList.innerHTML += `<div class="lb-item ${rankClass}"><span>${crown} #${index + 1} &nbsp; <b>${item.username}</b></span><span><b>${item.bestMoves}</b> Moves</span></div>`;
+                    if (item.username === currentUsername) {
+                        userBestMoves = item.bestMoves;
+                        userBestScoreBadge.textContent = `Your Best Score: ${userBestMoves} Moves`;
+                    }
+                });
+            });
+        }
 
         document.getElementById('closeMediaModalBtn').addEventListener('click', () => {
             mediaFullscreenModal.classList.add('hidden');
@@ -368,45 +606,22 @@
         });
 
         window.openFullscreenMedia = function(url, type) {
-            fullscreenMediaContainer.innerHTML = "";
-            if (type === 'video') {
-                fullscreenMediaContainer.innerHTML = `<video src="${url}" controls autoplay class="fullscreen-media-content"></video>`;
-            } else {
-                fullscreenMediaContainer.innerHTML = `<img src="${url}" class="fullscreen-media-content" alt="Fullscreen Image">`;
-            }
+            fullscreenMediaContainer.innerHTML = type === 'video' ? `<video src="${url}" controls autoplay class="fullscreen-media-content"></video>` : `<img src="${url}" class="fullscreen-media-content" alt="Fullscreen Image">`;
             mediaFullscreenModal.classList.remove('hidden');
         }
 
-        const landingInitialView = document.getElementById('landingInitialView');
-        const landingLoginForm = document.getElementById('landingLoginForm');
-        const landingAvatarStep = document.getElementById('landingAvatarStep');
-        const landingRegisterDetailsForm = document.getElementById('landingRegisterDetailsForm');
-
         document.getElementById('chatNowHeroBtn').addEventListener('click', () => {
-            landingInitialView.classList.add('hidden');
+            document.getElementById('landingInitialView').classList.add('hidden');
             landingAvatarStep.classList.remove('hidden');
         });
-
-        document.getElementById('goToLoginText').addEventListener('click', () => {
-            landingInitialView.classList.add('hidden');
-            landingLoginForm.classList.remove('hidden');
-        });
-
-        document.getElementById('backToInitialFromLogin').addEventListener('click', () => {
-            landingLoginForm.classList.add('hidden');
-            landingInitialView.classList.remove('hidden');
-        });
-
         document.getElementById('backToInitialFromAvatar').addEventListener('click', () => {
             landingAvatarStep.classList.add('hidden');
-            landingInitialView.classList.remove('hidden');
+            document.getElementById('landingInitialView').classList.remove('hidden');
         });
-
         document.getElementById('proceedToRegisterDetailsBtn').addEventListener('click', () => {
             landingAvatarStep.classList.add('hidden');
             landingRegisterDetailsForm.classList.remove('hidden');
         });
-
         document.getElementById('backToAvatarStepBtn').addEventListener('click', () => {
             landingRegisterDetailsForm.classList.add('hidden');
             landingAvatarStep.classList.remove('hidden');
@@ -430,7 +645,6 @@
 
         const genderFilterToggleBtn = document.getElementById('genderFilterToggleBtn');
         const genderDropdownMenu = document.getElementById('genderDropdownMenu');
-
         genderFilterToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); genderDropdownMenu.classList.toggle('show'); });
         window.addEventListener('click', () => genderDropdownMenu.classList.remove('show'));
 
@@ -444,42 +658,50 @@
 
         async function updateLastSeenStatus() {
             if (!currentUserDocId) return;
-            try {
-                await updateDoc(doc(db, "users", currentUserDocId), { lastSeen: serverTimestamp() });
-            } catch (err) {
-                console.error("LastSeen update error:", err);
-            }
+            try { await updateDoc(doc(db, "users", currentUserDocId), { lastSeen: serverTimestamp() }); } catch (err) {}
         }
         setInterval(updateLastSeenStatus, 30000);
 
         onAuthStateChanged(auth, async (user) => {
+            authResolved = true;
             if (user) {
                 try {
                     const usersSnap = await getDocs(collection(db, "users"));
                     let found = false;
+                    let currentDeviceSessionId = localStorage.getItem("nexus_session_id");
+
                     usersSnap.forEach(d => {
                         let data = d.data();
                         if (data.uid === user.uid) {
-                            found = true;
-                            currentUserDocId = d.id;
-                            currentUsername = data.username;
-                            currentUserData = data;
+                            if (data.activeSessionId && data.activeSessionId !== currentDeviceSessionId) {
+                                signOut(auth);
+                                alert("මෙම ගිණුම දැනට වෙනත් උපාංගයක (Device) ක්‍රියාත්මක වෙමින් පවතී.");
+                                return;
+                            }
+                            found = true; currentUserDocId = d.id; currentUsername = data.username; currentUserData = data;
                         }
                     });
-
+                    
                     waitingScreen.style.opacity = '0';
                     setTimeout(() => waitingScreen.classList.add('hidden'), 400);
-
+                    
                     if (found) {
                         landingPageView.classList.add('hidden');
                         headerUsernameText.textContent = currentUsername;
                         searchBarContainer.classList.remove('hidden');
                         bottomNav.classList.remove('hidden');
+                        
+                        if (!localStorage.getItem(`nexus_group_read_${currentUsername}`)) {
+                            localStorage.setItem(`nexus_group_read_${currentUsername}`, "0");
+                        }
+
                         updateLastSeenStatus();
                         startGlobalDataListener();
-                    }
+                    } else { showLandingPage(); }
                 } catch (err) {
-                    console.error("Auth state error:", err);
+                    waitingScreen.style.opacity = '0';
+                    setTimeout(() => waitingScreen.classList.add('hidden'), 400);
+                    showLandingPage();
                 }
             } else {
                 waitingScreen.style.opacity = '0';
@@ -495,90 +717,46 @@
             bottomNav.classList.add('hidden');
         }
 
-        // Login Handler (Username & Password පමණක් පාවිච්චි කරමින් Firebase Authentication වෙත ලොග් වීම)
-        document.getElementById('landingLoginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const usernameInput = document.getElementById('loginUsernameInput').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('loginPasswordInput').value;
-
-            try {
-                const usersSnap = await getDocs(collection(db, "users"));
-                let userEmail = null;
-                usersSnap.forEach(d => {
-                    let data = d.data();
-                    if (data.username === usernameInput) {
-                        userEmail = data.email;
-                    }
-                });
-
-                if (!userEmail) {
-                    alert("Username not found!");
-                    return;
-                }
-
-                await signInWithEmailAndPassword(auth, userEmail, passwordInput);
-            } catch (error) {
-                alert("Login Error: " + error.message);
-            }
-        });
-
-        // Register Handler (අභ්‍යන්තරව dummy email එකක් සාදාගෙන username සහ password පමණක් මගින් රෙජිස්ටර් වීම)
         document.getElementById('landingRegisterDetailsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const usernameInput = document.getElementById('landingUsername').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('landingPassword').value;
             const genderInput = document.getElementById('landingGender').value;
-            const countryInput = document.getElementById('landingCountry').value;
-
+            
             try {
                 const usersSnap = await getDocs(collection(db, "users"));
                 let usernameTaken = false;
-                usersSnap.forEach(d => {
-                    if (d.data().username === usernameInput) usernameTaken = true;
-                });
+                usersSnap.forEach(d => { if (d.data().username === usernameInput) usernameTaken = true; });
+                if (usernameTaken) { alert("මෙම නම දැනටමත් භාවිතා කර ඇත. වෙනත් නමක් දෙන්න!"); return; }
 
-                if (usernameTaken) {
-                    alert("Username already taken! Please choose another.");
-                    return;
-                }
+                const userCredential = await signInAnonymously(auth);
+                let newSessionId = 'sess_' + Math.random().toString(36.25);
+                localStorage.setItem("nexus_session_id", newSessionId);
 
-                // ස්වයංක්‍රීයව අභ්‍යන්තර Firebase Auth සඳහා email එකක් සකස් කරනු ලැබේ
-                const dummyEmail = `${usernameInput}@nexuschat.local`;
-
-                const userCredential = await createUserWithEmailAndPassword(auth, dummyEmail, passwordInput);
-                
                 const docRef = await addDoc(collection(db, "users"), {
-                    uid: userCredential.user.uid,
-                    username: usernameInput,
-                    email: dummyEmail,
-                    gender: genderInput,
-                    country: countryInput,
-                    avatarUrl: selectedAvatarUrl,
-                    password: passwordInput,
-                    createdAt: serverTimestamp(),
+                    uid: userCredential.user.uid, 
+                    username: usernameInput, 
+                    gender: genderInput, 
+                    avatarUrl: selectedAvatarUrl, 
+                    activeSessionId: newSessionId,
+                    createdAt: serverTimestamp(), 
                     lastSeen: serverTimestamp()
                 });
 
-                currentUserDocId = docRef.id;
-                currentUsername = usernameInput;
-                currentUserData = {
-                    uid: userCredential.user.uid,
-                    username: usernameInput,
-                    email: dummyEmail,
-                    gender: genderInput,
-                    country: countryInput,
-                    avatarUrl: selectedAvatarUrl
-                };
+                currentUserDocId = docRef.id; currentUsername = usernameInput;
+                currentUserData = { uid: userCredential.user.uid, username: usernameInput, gender: genderInput, avatarUrl: selectedAvatarUrl };
 
-                alert("Account created successfully!");
+                localStorage.setItem(`nexus_group_read_${usernameInput}`, "0");
+
+                alert("ගිණුම සාර්ථකව සාදන ලදී!");
                 landingPageView.classList.add('hidden');
                 headerUsernameText.textContent = currentUsername;
                 searchBarContainer.classList.remove('hidden');
                 bottomNav.classList.remove('hidden');
                 updateLastSeenStatus();
                 startGlobalDataListener();
-            } catch (error) {
-                alert("Registration Error: " + error.message);
+            } catch (error) { 
+                alert("Registration Error: " + error.message); 
+                console.error("Firebase Auth Error:", error);
             }
         });
 
@@ -586,28 +764,26 @@
             if (!currentUsername) return;
             document.getElementById('editUsernameInput').value = currentUsername;
             document.getElementById('editGender').value = currentUserData.gender || "";
-            document.getElementById('editCountry').value = currentUserData.country || "";
             editSelectedAvatarUrl = currentUserData.avatarUrl || "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
             document.getElementById('editCurrentAvatarPreview').src = editSelectedAvatarUrl;
-
             profileEditOverlay.classList.remove('hidden');
         });
 
         document.getElementById('closeProfileModalBtn').addEventListener('click', () => profileEditOverlay.classList.add('hidden'));
-        document.getElementById('profileLogoutBtn').addEventListener('click', async () => {
-            await signOut(auth);
-            location.reload();
+        document.getElementById('profileLogoutBtn').addEventListener('click', async () => { 
+            if (currentUserDocId) {
+                await updateDoc(doc(db, "users", currentUserDocId), { activeSessionId: "" });
+            }
+            localStorage.removeItem("nexus_session_id");
+            await signOut(auth); 
+            location.reload(); 
         });
 
         document.getElementById('profileEditForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             if (!currentUserDocId) return;
-            const newGender = document.getElementById('editGender').value;
-            const newCountry = document.getElementById('editCountry').value;
-
-            let updatePayload = { avatarUrl: editSelectedAvatarUrl, gender: newGender, country: newCountry };
-            await updateDoc(doc(db, "users", currentUserDocId), updatePayload);
-            alert("Profile updated successfully!");
+            await updateDoc(doc(db, "users", currentUserDocId), { avatarUrl: editSelectedAvatarUrl, gender: document.getElementById('editGender').value });
+            alert("ප්‍රොෆයිලය යාවත්කාලීන විය!");
             profileEditOverlay.classList.add('hidden');
             location.reload();
         });
@@ -616,18 +792,65 @@
             if(unsubscribeGlobal) unsubscribeGlobal();
             unsubscribeGlobal = onSnapshot(collection(db, "users"), (uSnap) => {
                 globalUsersSnap = uSnap;
+                
+                uSnap.forEach(d => {
+                    let data = d.data();
+                    let currentDeviceSessionId = localStorage.getItem("nexus_session_id");
+                    if (data.username === currentUsername && data.activeSessionId && data.activeSessionId !== currentDeviceSessionId) {
+                        alert("ඔබගේ ගිණුම වෙනත් උපාංගයකින් ඇතුළු වී ඇත.");
+                        signOut(auth);
+                        localStorage.removeItem("nexus_session_id");
+                        location.reload();
+                    }
+                });
+
                 onSnapshot(collection(db, "chats"), (cSnap) => {
                     globalChatsSnap = cSnap;
                     onSnapshot(collection(db, "groupChats"), (gSnap) => {
                         globalGroupChatsSnap = gSnap;
+                        
+                        hasUnreadCommunityMessage = false;
+                        if (currentUsername) {
+                            let lastReadTime = parseInt(localStorage.getItem(`nexus_group_read_${currentUsername}`) || "0");
+                            gSnap.forEach(d => {
+                                let m = d.data();
+                                if (m.createdAt) {
+                                    let msgTime = m.createdAt.toMillis();
+                                    if (msgTime > lastReadTime && m.sender !== currentUsername) {
+                                        hasUnreadCommunityMessage = true;
+                                    }
+                                }
+                            });
+                        }
+
                         renderCurrentView();
+                        checkUnreadNotifications();
                     });
                 });
             });
         }
 
+        function checkUnreadNotifications() {
+            if (!globalChatsSnap || !currentUsername) return;
+            let hasUnreadPrivateMessage = false;
+            
+            globalChatsSnap.forEach(d => {
+                let m = d.data();
+                if (m.receiver === currentUsername && !m.isRead) {
+                    let isDeleted = m.deletedFor && m.deletedFor.includes(currentUsername);
+                    if (!isDeleted) hasUnreadPrivateMessage = true;
+                }
+            });
+
+            if (hasUnreadPrivateMessage) {
+                inboxNotificationDot.classList.add('show');
+            } else {
+                inboxNotificationDot.classList.remove('show');
+            }
+        }
+
         function formatLastSeen(timestamp) {
-            if (!timestamp) return "offline";
+            if (!timestamp) return "online";
             let date = timestamp.toDate();
             let diffSeconds = Math.floor((new Date() - date) / 1000);
             if (diffSeconds < 60) return "online";
@@ -637,6 +860,7 @@
         }
 
         function renderCurrentView() {
+            ensureBotsExistInFirestore();
             if (!globalUsersSnap || !globalChatsSnap || !globalGroupChatsSnap) return;
             if (currentTab === 'contacts') renderContactsList(globalUsersSnap, globalChatsSnap, globalGroupChatsSnap);
             else renderInboxList(globalUsersSnap, globalChatsSnap);
@@ -648,23 +872,33 @@
             
             contactsListContainer.innerHTML += `
                 <div class="list-card-item" style="background: rgba(99,102,241,0.15);" onclick="openGroupChatRoom()">
-                    <img src="${groupAvatar}" class="item-avatar" alt="Group DP">
+                    <div class="item-avatar-wrapper">
+                        <img src="${groupAvatar}" class="item-avatar" alt="Group DP">
+                        <div class="unread-badge-dot ${hasUnreadCommunityMessage ? 'show' : ''}"></div>
+                    </div>
                     <div class="item-info">
                         <div class="item-title-wrapper">
                             <h4 class="item-title" style="color: #818cf8;">Nexus Community Group</h4>
                             <span class="item-meta-tag" style="background: #4f46e5; color: white;">Public</span>
                         </div>
-                        <p class="item-sub" style="font-weight: bold; color: #cbd5e1;">Public Group Chat (Tap to join)</p>
+                        <p class="item-sub" style="font-weight: bold; color: #cbd5e1;">Public Group Chat & Game Leaderboard</p>
                     </div>
                 </div>`;
 
             let activeInboxUsers = new Set();
+            let unreadSenders = new Set();
+            
             chatsSnap.forEach(docSnap => {
                 let m = docSnap.data();
                 let isDeleted = m.deletedFor && m.deletedFor.includes(currentUsername);
                 if (!isDeleted && (m.sender === currentUsername || m.receiver === currentUsername)) {
                     if (m.sender === currentUsername) activeInboxUsers.add(m.receiver);
-                    if (m.receiver === currentUsername) activeInboxUsers.add(m.sender);
+                    if (m.receiver === currentUsername) {
+                        activeInboxUsers.add(m.sender);
+                        if (!m.isRead) {
+                            unreadSenders.add(m.sender);
+                        }
+                    }
                 }
             });
 
@@ -672,21 +906,25 @@
                 let uData = d.data();
                 let u = uData.username;
                 let avatar = uData.avatarUrl || "https://api.dicebear.com/7.x/bottts/svg?seed=Felix";
-                let gender = uData.gender || "", country = uData.country || "";
+                let gender = uData.gender || "";
                 
                 if (u && u !== currentUsername) {
                     if (searchQuery && !u.toLowerCase().includes(searchQuery.toLowerCase())) return;
                     if (selectedGenderFilter !== 'All' && gender !== selectedGenderFilter) return;
                     if (activeInboxUsers.has(u)) return;
 
+                    let hasUnread = unreadSenders.has(u);
+
                     contactsListContainer.innerHTML += `
                         <div class="list-card-item" onclick="openChatRoom('${u}', '${avatar}')">
-                            <img src="${avatar}" class="item-avatar" alt="DP">
+                            <div class="item-avatar-wrapper">
+                                <img src="${avatar}" class="item-avatar" alt="DP">
+                                <div class="unread-badge-dot ${hasUnread ? 'show' : ''}"></div>
+                            </div>
                             <div class="item-info">
                                 <div class="item-title-wrapper">
                                     <h4 class="item-title">${u}</h4>
                                     <span class="item-meta-tag">${gender}</span>
-                                    <span class="item-meta-tag">${country}</span>
                                 </div>
                                 <p class="item-sub">${formatLastSeen(uData.lastSeen)}</p>
                             </div>
@@ -698,15 +936,20 @@
         function renderInboxList(usersSnap, chatsSnap) {
             inboxListContainer.innerHTML = "";
             let chatPartners = new Map(), userInfoMap = {};
+            usersSnap.forEach(d => { userInfoMap[d.data().username] = { avatar: d.data().avatarUrl, gender: d.data().gender, lastSeen: d.data().lastSeen }; });
 
-            usersSnap.forEach(d => { userInfoMap[d.data().username] = { avatar: d.data().avatarUrl, gender: d.data().gender, country: d.data().country, lastSeen: d.data().lastSeen }; });
-
+            let unreadSenders = new Set();
             chatsSnap.forEach(docSnap => {
                 let m = docSnap.data();
                 let isDeleted = m.deletedFor && m.deletedFor.includes(currentUsername);
                 if (!isDeleted && (m.sender === currentUsername || m.receiver === currentUsername)) {
                     let partner = m.sender === currentUsername ? m.receiver : m.sender;
                     let msgTime = m.createdAt ? m.createdAt.toDate() : new Date(0);
+                    
+                    if (m.receiver === currentUsername && !m.isRead) {
+                        unreadSenders.add(partner);
+                    }
+
                     if (!chatPartners.has(partner) || chatPartners.get(partner).time < msgTime) {
                         chatPartners.set(partner, { partner, time: msgTime });
                     }
@@ -714,13 +957,23 @@
             });
 
             let partnersArr = Array.from(chatPartners.values()).sort((a, b) => b.time - a.time);
+            if (partnersArr.length === 0) {
+                inboxListContainer.innerHTML = `<p style="text-align: center; color: #94a3b8; padding: 20px;">No messages in inbox.</p>`;
+                return;
+            }
+
             partnersArr.forEach(item => {
                 let partner = item.partner, pInfo = userInfoMap[partner] || {};
+                let hasUnread = unreadSenders.has(partner);
+                
                 let itemElem = document.createElement('div');
                 itemElem.className = 'list-card-item';
                 itemElem.innerHTML = `
                     <div style="display:flex; align-items:center; flex:1; overflow:hidden;">
-                        <img src="${pInfo.avatar || ''}" class="item-avatar" alt="DP">
+                        <div class="item-avatar-wrapper">
+                            <img src="${pInfo.avatar || ''}" class="item-avatar" alt="DP">
+                            <div class="unread-badge-dot ${hasUnread ? 'show' : ''}"></div>
+                        </div>
                         <div class="item-info">
                             <div class="item-title-wrapper"><h4 class="item-title">${partner}</h4></div>
                             <p class="item-sub">${formatLastSeen(pInfo.lastSeen)}</p>
@@ -735,64 +988,85 @@
         }
 
         searchInput.addEventListener('input', (e) => { searchQuery = e.target.value.trim(); renderCurrentView(); });
-        document.getElementById('navContactsBtn').addEventListener('click', () => { currentTab = 'contacts'; contactsSection.classList.remove('hidden'); inboxSection.classList.add('hidden'); chatRoomView.classList.add('hidden'); renderCurrentView(); });
-        document.getElementById('navInboxBtn').addEventListener('click', () => { currentTab = 'inbox'; inboxSection.classList.remove('hidden'); contactsSection.classList.add('hidden'); chatRoomView.classList.add('hidden'); renderCurrentView(); });
+        
+        document.getElementById('navContactsBtn').addEventListener('click', () => { 
+            currentTab = 'contacts'; contactsSection.classList.remove('hidden'); inboxSection.classList.add('hidden'); chatRoomView.classList.add('hidden'); 
+            document.getElementById('navContactsBtn').classList.add('active'); document.getElementById('navInboxBtn').classList.remove('active'); renderCurrentView(); 
+        });
+        document.getElementById('navInboxBtn').addEventListener('click', () => { 
+            currentTab = 'inbox'; inboxSection.classList.remove('hidden'); contactsSection.classList.add('hidden'); chatRoomView.classList.add('hidden'); 
+            document.getElementById('navInboxBtn').classList.add('active'); document.getElementById('navContactsBtn').classList.remove('active'); renderCurrentView(); 
+        });
 
         window.openChatRoom = async function(receiver, avatarUrl) {
             isGroupChatActive = false; activeChatReceiver = receiver;
+            replyingToMessage = null;
+            document.getElementById('activeReplyContainer').classList.remove('show');
             document.getElementById('chatRoomTitle').textContent = receiver;
             document.getElementById('chatHeaderAvatar').src = avatarUrl;
+            
+            groupLeaderboardBox.style.display = "none";
             chatRoomView.classList.remove('hidden');
             
             if(unsubscribeChat) unsubscribeChat();
-            unsubscribeChat = onSnapshot(query(collection(db, "chats"), orderBy("createdAt", "asc")), (snapshot) => {
+            unsubscribeChat = onSnapshot(query(collection(db, "chats"), orderBy("createdAt", "asc")), async (snapshot) => {
                 let box = document.getElementById('chatMessagesBox');
                 box.innerHTML = "";
+                let unreadUpdates = [];
+
                 snapshot.forEach(d => {
                     let m = d.data();
                     let isDeleted = m.deletedFor && m.deletedFor.includes(currentUsername);
                     if (!isDeleted && ((m.sender === currentUsername && m.receiver === receiver) || (m.sender === receiver && m.receiver === currentUsername))) {
                         let isMyMsg = m.sender === currentUsername;
-                        let contentHTML = "";
-                        if (m.mediaType === 'video') {
-                            contentHTML = `<video src="${m.mediaUrl}" class="chat-media-video" onclick="openFullscreenMedia('${m.mediaUrl}', 'video')"></video>`;
-                        } else if (m.mediaUrl) {
-                            contentHTML = `<img src="${m.mediaUrl}" class="chat-media-img" alt="Media" onclick="openFullscreenMedia('${m.mediaUrl}', 'image')">`;
-                        } else {
-                            contentHTML = `<span>${m.text}</span>`;
-                        }
-                        box.innerHTML += `<div class="chat-msg ${isMyMsg ? 'sent' : 'received'}">${contentHTML}${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', false)">Delete</button>` : ''}</div>`;
+                        if (!isMyMsg && !m.isRead) unreadUpdates.push(updateDoc(doc(db, "chats", d.id), { isRead: true }));
+
+                        let contentHTML = m.mediaType === 'video' ? `<video src="${m.mediaUrl}" class="chat-media-video" onclick="openFullscreenMedia('${m.mediaUrl}', 'video')"></video>` : (m.mediaUrl ? `<img src="${m.mediaUrl}" class="chat-media-img" alt="Media" onclick="openFullscreenMedia('${m.mediaUrl}', 'image')">` : `<span>${m.text}</span>`);
+                        let replyHTML = m.replyTo ? `<div class="msg-reply-preview"><span class="reply-author">${m.replyTo.sender}</span><span>${m.replyTo.text || '[Media]'}</span></div>` : "";
+                        let ticksHTML = isMyMsg ? `<div class="msg-footer"><span class="msg-ticks ${m.isRead ? "read" : "delivered"}">✓✓</span></div>` : "";
+
+                        box.innerHTML += `
+                            <div class="chat-msg-wrapper ${isMyMsg ? 'sent' : 'received'}">
+                                <div class="chat-msg ${isMyMsg ? 'sent' : 'received'}" data-sender="${m.sender}" data-text="${m.text || (m.mediaType ? '[Media]' : '')}">
+                                    ${replyHTML} ${contentHTML} ${ticksHTML}
+                                    ${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', false)">Delete</button>` : ''}
+                                </div>
+                            </div>`;
                     }
                 });
                 box.scrollTop = box.scrollHeight;
+                attachSwipeEvents();
+                if (unreadUpdates.length > 0) await Promise.all(unreadUpdates);
             });
         }
 
-        window.openGroupChatRoom = function() {
-            isGroupChatActive = true; activeChatReceiver = null;
-            document.getElementById('chatRoomTitle').textContent = "Nexus Community Group";
-            document.getElementById('chatHeaderAvatar').src = "https://api.dicebear.com/7.x/identicon/svg?seed=NexusCommunity";
-            chatRoomView.classList.remove('hidden');
-
-            if(unsubscribeChat) unsubscribeChat();
-            unsubscribeChat = onSnapshot(query(collection(db, "groupChats"), orderBy("createdAt", "asc")), (snapshot) => {
-                let box = document.getElementById('chatMessagesBox');
-                box.innerHTML = "";
-                snapshot.forEach(d => {
-                    let m = d.data();
-                    let isMyMsg = m.sender === currentUsername;
-                    let contentHTML = "";
-                    if (m.mediaType === 'video') {
-                        contentHTML = `<video src="${m.mediaUrl}" class="chat-media-video" onclick="openFullscreenMedia('${m.mediaUrl}', 'video')"></video>`;
-                    } else if (m.mediaUrl) {
-                        contentHTML = `<img src="${m.mediaUrl}" class="chat-media-img" alt="Media" onclick="openFullscreenMedia('${m.mediaUrl}', 'image')">`;
-                    } else {
-                        contentHTML = `<span>${m.text}</span>`;
-                    }
-                    box.innerHTML += `<div class="chat-msg ${isMyMsg ? 'sent' : 'received'}"><span style="font-size: 11px; font-weight: bold; color: #818cf8;">${m.sender}</span>${contentHTML}${isMyMsg ? `<button class="chat-msg-delete-btn" onclick="deleteSingleChatMessage('${d.id}', true)">Delete</button>` : ''}</div>`;
+        function attachSwipeEvents() {
+            document.querySelectorAll('.chat-msg-wrapper').forEach(wrapper => {
+                let startX = 0, currentX = 0, isSwiping = false;
+                let msgElem = wrapper.querySelector('.chat-msg');
+                wrapper.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; isSwiping = true; }, {passive: true});
+                wrapper.addEventListener('touchmove', (e) => {
+                    if (!isSwiping) return;
+                    let diff = e.touches[0].clientX - startX;
+                    if (diff > 0 && diff < 100) msgElem.style.transform = `translateX(${diff}px)`;
+                }, {passive: true});
+                wrapper.addEventListener('touchend', (e) => {
+                    if (!isSwiping) return;
+                    let diff = currentX - startX; isSwiping = false; msgElem.style.transform = 'translateX(0px)';
+                    if (diff > 50) triggerReply(msgElem);
                 });
-                box.scrollTop = box.scrollHeight;
+                wrapper.addEventListener('dblclick', () => triggerReply(msgElem));
             });
+        }
+
+        function triggerReply(msgElem) {
+            let senderName = msgElem.getAttribute('data-sender');
+            let msgText = msgElem.getAttribute('data-text');
+            replyingToMessage = { sender: senderName, text: msgText };
+            document.getElementById('activeReplyAuthor').textContent = `Replying to ${senderName}`;
+            document.getElementById('activeReplyText').textContent = msgText;
+            document.getElementById('activeReplyContainer').classList.add('show');
+            document.getElementById('chatMessageInput').focus();
         }
 
         document.getElementById('backToListBtn').addEventListener('click', () => { chatRoomView.classList.add('hidden'); renderCurrentView(); });
@@ -801,25 +1075,50 @@
             let text = document.getElementById('chatMessageInput').value.trim();
             if (!text) return;
             document.getElementById('chatMessageInput').value = "";
-            if (isGroupChatActive) await addDoc(collection(db, "groupChats"), { sender: currentUsername, text, mediaUrl: "", mediaType: "", createdAt: serverTimestamp() });
-            else if (activeChatReceiver) await addDoc(collection(db, "chats"), { sender: currentUsername, receiver: activeChatReceiver, text, mediaUrl: "", mediaType: "", isRead: false, deletedFor: [], createdAt: serverTimestamp() });
+            let replyData = replyingToMessage ? { sender: replyingToMessage.sender, text: replyingToMessage.text } : null;
+            replyingToMessage = null;
+            document.getElementById('activeReplyContainer').classList.remove('show');
+
+            if (isGroupChatActive) {
+                await addDoc(collection(db, "groupChats"), { sender: currentUsername, text, mediaUrl: "", mediaType: "", replyTo: replyData, createdAt: serverTimestamp() });
+            } else if (activeChatReceiver) {
+                await addDoc(collection(db, "chats"), { sender: currentUsername, receiver: activeChatReceiver, text, mediaUrl: "", mediaType: "", replyTo: replyData, isRead: false, deletedFor: [], createdAt: serverTimestamp() });
+                
+                let isBotReceiver = prebuiltBots.some(b => b.username === activeChatReceiver);
+                if (isBotReceiver) {
+                    setTimeout(async () => {
+                        const botResponses = [
+                            "That's so interesting! Tell me more 😊",
+                            "I totally agree with you on that!",
+                            "Awesome! How has your day been so far?",
+                            "Haha true! What else are you up to?"
+                        ];
+                        let randomReply = botResponses[Math.floor(Math.random() * botResponses.length)];
+                        await addDoc(collection(db, "chats"), {
+                            sender: activeChatReceiver, receiver: currentUsername, text: randomReply,
+                            mediaUrl: "", mediaType: "", replyTo: null, isRead: false, deletedFor: [], createdAt: serverTimestamp()
+                        });
+                    }, 1500);
+                }
+            }
         });
 
         document.getElementById('chatMediaInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-
             const isVideo = file.type.startsWith('video') || file.name.match(/\.(mp4|mkv|mov|webm|avi)$/i);
             const mediaType = isVideo ? 'video' : 'image';
-
             const reader = new FileReader();
             reader.onload = async function(uploadEvent) {
                 const base64Data = uploadEvent.target.result;
+                let replyData = replyingToMessage ? { sender: replyingToMessage.sender, text: replyingToMessage.text } : null;
+                replyingToMessage = null;
+                document.getElementById('activeReplyContainer').classList.remove('show');
                 
                 if (isGroupChatActive) {
-                    await addDoc(collection(db, "groupChats"), { sender: currentUsername, text: "", mediaUrl: base64Data, mediaType, createdAt: serverTimestamp() });
+                    await addDoc(collection(db, "groupChats"), { sender: currentUsername, text: "", mediaUrl: base64Data, mediaType, replyTo: replyData, createdAt: serverTimestamp() });
                 } else if (activeChatReceiver) {
-                    await addDoc(collection(db, "chats"), { sender: currentUsername, receiver: activeChatReceiver, text: "", mediaUrl: base64Data, mediaType, isRead: false, deletedFor: [], createdAt: serverTimestamp() });
+                    await addDoc(collection(db, "chats"), { sender: currentUsername, receiver: activeChatReceiver, text: "", mediaUrl: base64Data, mediaType, replyTo: replyData, isRead: false, deletedFor: [], createdAt: serverTimestamp() });
                 }
                 e.target.value = "";
             };
@@ -836,8 +1135,8 @@
                 let updates = [];
                 chatsSnap.forEach(d => {
                     let m = d.data();
+                    let deletedFor = m.deletedFor || [];
                     if ((m.sender === currentUsername && m.receiver === partner) || (m.sender === partner && m.receiver === currentUsername)) {
-                        let deletedFor = m.deletedFor || [];
                         if (!deletedFor.includes(currentUsername)) {
                             deletedFor.push(currentUsername);
                             updates.push(updateDoc(doc(db, "chats", d.id), { deletedFor }));
