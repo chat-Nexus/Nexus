@@ -64,8 +64,9 @@
             </div>
 
             <div class="tab-bar">
-                <button id="tabUsersBtn" class="tab-btn active">Users Management</button>
-                <button id="tabGroupChatBtn" class="tab-btn">Community Group Chat</button>
+                <button id="tabUsersBtn" class="tab-btn active">Users</button>
+                <button id="tabGroupChatBtn" class="tab-btn">Group Chat</button>
+                <button id="tabAdSettingsBtn" class="tab-btn">First Ad Settings</button>
             </div>
             
             <div id="adminUsersSection" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; border: 1px solid #334155; border-radius: 12px; padding: 10px; background: #0f172a;">
@@ -75,12 +76,24 @@
             <div id="adminGroupChatSection" class="hidden" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; border: 1px solid #334155; border-radius: 12px; padding: 10px; background: #0f172a;">
                 <p style="text-align: center; color: #94a3b8;">Loading group messages...</p>
             </div>
+
+            <div id="adminAdSettingsSection" class="hidden" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; border: 1px solid #334155; border-radius: 12px; padding: 15px; background: #0f172a; text-align: center;">
+                <h3 style="color: #f43f5e; margin-top: 0;">First-Login Advertisement Image</h3>
+                <p style="font-size: 13px; color: #94a3b8;">Upload a photo that will pop up the first time a user logs in.</p>
+                
+                <div style="margin: 10px auto;">
+                    <img id="currentAdPreview" src="" alt="No Ad Set" style="max-width: 100%; max-height: 200px; border-radius: 10px; border: 2px dashed #475569; object-fit: contain; display: none;">
+                </div>
+
+                <input type="file" id="adImageUploadInput" accept="image/*" class="auth-input" style="padding: 10px;">
+                <button type="button" id="saveAdImageBtn" class="form-submit">Save Ad Image</button>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, deleteDoc, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, deleteDoc, setDoc, getDoc, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA0huAGXtGHRsRHtVivcLnG-yS3CD6t8Jo",
@@ -97,6 +110,7 @@
         const adminMainPanel = document.getElementById('adminMainPanel');
         const adminUsersSection = document.getElementById('adminUsersSection');
         const adminGroupChatSection = document.getElementById('adminGroupChatSection');
+        const adminAdSettingsSection = document.getElementById('adminAdSettingsSection');
 
         const mediaFullscreenModal = document.getElementById('mediaFullscreenModal');
         const fullscreenMediaContainer = document.getElementById('fullscreenMediaContainer');
@@ -122,6 +136,7 @@
                 adminMainPanel.classList.remove('hidden');
                 loadAdminUsers();
                 loadAdminGroupMessages();
+                loadAdSettings();
             } else {
                 adminLoginBox.classList.remove('hidden');
                 adminMainPanel.classList.add('hidden');
@@ -150,15 +165,28 @@
         document.getElementById('tabUsersBtn').addEventListener('click', () => {
             document.getElementById('tabUsersBtn').classList.add('active');
             document.getElementById('tabGroupChatBtn').classList.remove('active');
+            document.getElementById('tabAdSettingsBtn').classList.remove('active');
             adminUsersSection.classList.remove('hidden');
             adminGroupChatSection.classList.add('hidden');
+            adminAdSettingsSection.classList.add('hidden');
         });
 
         document.getElementById('tabGroupChatBtn').addEventListener('click', () => {
             document.getElementById('tabGroupChatBtn').classList.add('active');
             document.getElementById('tabUsersBtn').classList.remove('active');
+            document.getElementById('tabAdSettingsBtn').classList.remove('active');
             adminGroupChatSection.classList.remove('hidden');
             adminUsersSection.classList.add('hidden');
+            adminAdSettingsSection.classList.add('hidden');
+        });
+
+        document.getElementById('tabAdSettingsBtn').addEventListener('click', () => {
+            document.getElementById('tabAdSettingsBtn').classList.add('active');
+            document.getElementById('tabUsersBtn').classList.remove('active');
+            document.getElementById('tabGroupChatBtn').classList.remove('active');
+            adminAdSettingsSection.classList.remove('hidden');
+            adminUsersSection.classList.add('hidden');
+            adminGroupChatSection.classList.add('hidden');
         });
 
         async function loadAdminUsers() {
@@ -219,6 +247,41 @@
                 if (count === 0) adminGroupChatSection.innerHTML = "<p style='text-align: center; color: #94a3b8; padding: 20px;'>No group messages found.</p>";
             });
         }
+
+        async function loadAdSettings() {
+            try {
+                const adSnap = await getDoc(doc(db, "settings", "advertisement"));
+                const previewImg = document.getElementById('currentAdPreview');
+                if (adSnap.exists() && adSnap.data().imageUrl) {
+                    previewImg.src = adSnap.data().imageUrl;
+                    previewImg.style.display = 'block';
+                } else {
+                    previewImg.style.display = 'none';
+                }
+            } catch (e) {}
+        }
+
+        document.getElementById('saveAdImageBtn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('adImageUploadInput');
+            if (fileInput.files.length === 0) {
+                alert("පළමුව පින්තූරයක් තෝරන්න!");
+                return;
+            }
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Img = e.target.result;
+                try {
+                    await setDoc(doc(db, "settings", "advertisement"), { imageUrl: base64Img });
+                    alert("বিজ্ঞാപනය (Ad Image) සාර්ථකව සුරකින ලදී!");
+                    loadAdSettings();
+                    fileInput.value = "";
+                } catch (err) {
+                    alert("Error saving ad image: " + err.message);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
 
         window.deleteUserAccount = async function(userId, username) {
             if (confirm(`Are you sure you want to delete user "${username}"?`)) {
