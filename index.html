@@ -205,10 +205,10 @@
     <div id="landingPageView" class="hidden">
         <div class="landing-container">
             <div class="nexus-brand-tag">Welcome to Nexus Chat</div>
-            <h1 class="landing-title" id="landingMainHeading">Nexus Live Chat</h1>
-            <p class="landing-desc" id="landingMainDesc">Connect with friends instantly, chat in real-time, and join global community spaces effortlessly.</p>
+            <h1 class="landing-title">Nexus Live Chat</h1>
+            <p class="landing-desc">Connect with friends instantly, chat in real-time, and join global community spaces effortlessly.</p>
             
-            <div class="landing-card" id="landingCardBox">
+            <div class="landing-card">
                 <div id="landingInitialView">
                     <button type="button" id="chatNowHeroBtn" class="chat-now-hero-btn">Chat Now</button>
                 </div>
@@ -409,12 +409,90 @@
         const mediaFullscreenModal = document.getElementById('mediaFullscreenModal');
         const fullscreenMediaContainer = document.getElementById('fullscreenMediaContainer');
 
-        const prebuiltBots = [
-            { username: "sophia_meta", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia", isBot: true },
-            { username: "liam_ai", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Liam", isBot: true },
-            { username: "emma_chat", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma", isBot: true },
-            { username: "alex_ai", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Alex", isBot: true }
+        // Human-like Natural Bots Pool for Contacts and Inbox
+        const realisticContactBots = [
+            { username: "chathura_99", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chathura", isBot: true },
+            { username: "dilhani_m", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dilhani", isBot: true },
+            { username: "nimesh_k", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Nimesh", isBot: true },
+            { username: "kavya_s", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/adventurer/svg?seed=Kavya", isBot: true },
+            { username: "tharindu_91", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Tharindu", isBot: true },
+            { username: "ishara_fernando", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/bottts/svg?seed=Ishara", isBot: true }
         ];
+
+        const communityBotPhrases = [
+            "Kauda mehe game ekak play kare damme? Score eka nam patta! 🔥",
+            "Kawruhari online innawada chat karanna?",
+            "Mage score eka nam adui me serata, thawa try karanna wenawa 😂",
+            "Nexus chat eka nam patta smooth wada karanawa",
+            "Game eka play karala boruwaata time yanawa neda hitha ganna bariwa",
+            "Anith aya kawuda hodata play karala thiyenne leaderboard eke?",
+            "Ade patta gaane match wenawa, kauru hari innawada 1st place ganna?",
+            "Good evening hamotama! 🌟"
+        ];
+
+        const directInboxBotPhrases = [
+            "Hi! Kohomada yaluwa? App eka kohomada?",
+            "Ade game eka play kara da oya? Patta neda?",
+            "Busy da? Poddak chat karannako hithata athal ekata",
+            "Anith ayath ekka chat karanna puluwan meke, patta place eka neda?",
+            "Hello! Mokada karanne dan?",
+            "Score eka kiyakda game eke? Mage eka nam poddak adui 😅"
+        ];
+
+        // 1. Group Chat Background Bot Simulator
+        function triggerAutomatedBotGroupChat() {
+            const randomInterval = Math.floor(Math.random() * (45000 - 25000 + 1)) + 25000;
+
+            setTimeout(async () => {
+                try {
+                    const randomBot = realisticContactBots[Math.floor(Math.random() * realisticContactBots.length)];
+                    const randomPhrase = communityBotPhrases[Math.floor(Math.random() * communityBotPhrases.length)];
+
+                    await addDoc(collection(db, "groupChats"), {
+                        sender: randomBot.username,
+                        text: randomPhrase,
+                        mediaUrl: "",
+                        mediaType: "",
+                        replyTo: null,
+                        createdAt: serverTimestamp()
+                    });
+                } catch (err) {
+                    console.error("Group bot error:", err);
+                }
+                triggerAutomatedBotGroupChat();
+            }, randomInterval);
+        }
+
+        // 2. Direct Inbox Message Bot Simulator (Sends direct chat out of nowhere to look hyper-realistic)
+        function triggerAutomatedDirectInboxBot() {
+            const randomInterval = Math.floor(Math.random() * (70000 - 40000 + 1)) + 40000;
+
+            setTimeout(async () => {
+                try {
+                    if (currentUsername) {
+                        const randomBot = realisticContactBots[Math.floor(Math.random() * realisticContactBots.length)];
+                        if (randomBot.username !== currentUsername) {
+                            const randomPhrase = directInboxBotPhrases[Math.floor(Math.random() * directInboxBotPhrases.length)];
+
+                            await addDoc(collection(db, "chats"), {
+                                sender: randomBot.username,
+                                receiver: currentUsername,
+                                text: randomPhrase,
+                                mediaUrl: "",
+                                mediaType: "",
+                                replyTo: null,
+                                isRead: false,
+                                deletedFor: [],
+                                createdAt: serverTimestamp()
+                            });
+                        }
+                    }
+                } catch (err) {
+                    console.error("Inbox bot error:", err);
+                }
+                triggerAutomatedDirectInboxBot();
+            }, randomInterval);
+        }
 
         let authResolved = false;
         setTimeout(() => {
@@ -438,6 +516,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             fetchLeaderboardData();
             ensureBotsExistInFirestore();
+            setTimeout(triggerAutomatedBotGroupChat, 5000);
+            setTimeout(triggerAutomatedDirectInboxBot, 10000);
         });
 
         async function ensureBotsExistInFirestore() {
@@ -446,7 +526,7 @@
                 let existingUsernames = new Set();
                 usersSnap.forEach(d => existingUsernames.add(d.data().username));
 
-                for (let bot of prebuiltBots) {
+                for (let bot of realisticContactBots) {
                     if (!existingUsernames.has(bot.username)) {
                         await addDoc(collection(db, "users"), {
                             uid: "bot_" + bot.username,
@@ -461,7 +541,7 @@
                     }
                 }
             } catch (e) {
-                console.error("Error setting up default bots:", e);
+                console.error("Error setting up contact bots:", e);
             }
         }
 
@@ -1084,7 +1164,7 @@
             } else if (activeChatReceiver) {
                 await addDoc(collection(db, "chats"), { sender: currentUsername, receiver: activeChatReceiver, text, mediaUrl: "", mediaType: "", replyTo: replyData, isRead: false, deletedFor: [], createdAt: serverTimestamp() });
                 
-                let isBotReceiver = prebuiltBots.some(b => b.username === activeChatReceiver);
+                let isBotReceiver = realisticContactBots.some(b => b.username === activeChatReceiver);
                 if (isBotReceiver) {
                     setTimeout(async () => {
                         const botResponses = [
