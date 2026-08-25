@@ -115,6 +115,8 @@
         const mediaFullscreenModal = document.getElementById('mediaFullscreenModal');
         const fullscreenMediaContainer = document.getElementById('fullscreenMediaContainer');
 
+        let unsubscribeGroupChat = null;
+
         document.getElementById('closeMediaModalBtn').addEventListener('click', () => {
             mediaFullscreenModal.classList.add('hidden');
             fullscreenMediaContainer.innerHTML = "";
@@ -140,6 +142,7 @@
             } else {
                 adminLoginBox.classList.remove('hidden');
                 adminMainPanel.classList.add('hidden');
+                if (unsubscribeGroupChat) unsubscribeGroupChat();
             }
         }
         checkAdminSession();
@@ -159,6 +162,7 @@
 
         document.getElementById('adminLogoutBtn').addEventListener('click', () => {
             localStorage.removeItem('nexus_admin_logged');
+            if (unsubscribeGroupChat) unsubscribeGroupChat();
             checkAdminSession();
         });
 
@@ -219,7 +223,8 @@
         }
 
         function loadAdminGroupMessages() {
-            onSnapshot(query(collection(db, "groupChats"), orderBy("createdAt", "asc")), (snapshot) => {
+            if (unsubscribeGroupChat) unsubscribeGroupChat();
+            unsubscribeGroupChat = onSnapshot(query(collection(db, "groupChats"), orderBy("createdAt", "asc")), (snapshot) => {
                 adminGroupChatSection.innerHTML = "";
                 let count = 0;
                 snapshot.forEach(d => {
