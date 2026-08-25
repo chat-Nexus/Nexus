@@ -176,6 +176,24 @@
             border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer;
             display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px);
         }
+
+        #firstLoginAdModal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 7000;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        #firstLoginAdModal.hidden { display: none !important; }
+        .ad-popup-container {
+            position: relative; max-width: 400px; width: 100%; background: #1e293b;
+            border: 2px solid #6366f1; border-radius: 20px; padding: 15px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .ad-popup-img { width: 100%; border-radius: 12px; object-fit: contain; max-height: 400px; display: block; }
+        .ad-close-btn {
+            position: absolute; top: -12px; right: -12px; background: #f43f5e; color: white;
+            border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; font-weight: bold;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -184,6 +202,14 @@
         <div class="waiting-logo">Nexus Chat</div>
         <div class="spinner"></div>
         <div class="waiting-text">Loading application data...</div>
+    </div>
+
+    <!-- First Login Ad Modal -->
+    <div id="firstLoginAdModal" class="hidden">
+        <div class="ad-popup-container">
+            <button type="button" class="ad-close-btn" id="closeFirstLoginAdBtn">×</button>
+            <img id="dynamicAdImage" src="" alt="Advertisement" class="ad-popup-img">
+        </div>
     </div>
 
     <div id="gameModal" class="hidden">
@@ -361,7 +387,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInAnonymously, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, setDoc, doc, deleteDoc, serverTimestamp, query, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, setDoc, doc, deleteDoc, serverTimestamp, query, onSnapshot, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA0huAGXtGHRsRHtVivcLnG-yS3CD6t8Jo",
@@ -408,8 +434,9 @@
         
         const mediaFullscreenModal = document.getElementById('mediaFullscreenModal');
         const fullscreenMediaContainer = document.getElementById('fullscreenMediaContainer');
+        const firstLoginAdModal = document.getElementById('firstLoginAdModal');
+        const dynamicAdImage = document.getElementById('dynamicAdImage');
 
-        // Human-like Natural Bots Pool for Contacts and Inbox
         const realisticContactBots = [
             { username: "chathura_99", gender: "Male", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Chathura", isBot: true },
             { username: "dilhani_m", gender: "Female", avatarUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Dilhani", isBot: true },
@@ -439,57 +466,34 @@
             "Score eka kiyakda game eke? Mage eka nam poddak adui 😅"
         ];
 
-        // 1. Group Chat Background Bot Simulator
         function triggerAutomatedBotGroupChat() {
             const randomInterval = Math.floor(Math.random() * (45000 - 25000 + 1)) + 25000;
-
             setTimeout(async () => {
                 try {
                     const randomBot = realisticContactBots[Math.floor(Math.random() * realisticContactBots.length)];
                     const randomPhrase = communityBotPhrases[Math.floor(Math.random() * communityBotPhrases.length)];
-
                     await addDoc(collection(db, "groupChats"), {
-                        sender: randomBot.username,
-                        text: randomPhrase,
-                        mediaUrl: "",
-                        mediaType: "",
-                        replyTo: null,
-                        createdAt: serverTimestamp()
+                        sender: randomBot.username, text: randomPhrase, mediaUrl: "", mediaType: "", replyTo: null, createdAt: serverTimestamp()
                     });
-                } catch (err) {
-                    console.error("Group bot error:", err);
-                }
+                } catch (err) {}
                 triggerAutomatedBotGroupChat();
             }, randomInterval);
         }
 
-        // 2. Direct Inbox Message Bot Simulator (Sends direct chat out of nowhere to look hyper-realistic)
         function triggerAutomatedDirectInboxBot() {
             const randomInterval = Math.floor(Math.random() * (70000 - 40000 + 1)) + 40000;
-
             setTimeout(async () => {
                 try {
                     if (currentUsername) {
                         const randomBot = realisticContactBots[Math.floor(Math.random() * realisticContactBots.length)];
                         if (randomBot.username !== currentUsername) {
                             const randomPhrase = directInboxBotPhrases[Math.floor(Math.random() * directInboxBotPhrases.length)];
-
                             await addDoc(collection(db, "chats"), {
-                                sender: randomBot.username,
-                                receiver: currentUsername,
-                                text: randomPhrase,
-                                mediaUrl: "",
-                                mediaType: "",
-                                replyTo: null,
-                                isRead: false,
-                                deletedFor: [],
-                                createdAt: serverTimestamp()
+                                sender: randomBot.username, receiver: currentUsername, text: randomPhrase, mediaUrl: "", mediaType: "", replyTo: null, isRead: false, deletedFor: [], createdAt: serverTimestamp()
                             });
                         }
                     }
-                } catch (err) {
-                    console.error("Inbox bot error:", err);
-                }
+                } catch (err) {}
                 triggerAutomatedDirectInboxBot();
             }, randomInterval);
         }
@@ -520,6 +524,26 @@
             setTimeout(triggerAutomatedDirectInboxBot, 10000);
         });
 
+        document.getElementById('closeFirstLoginAdBtn').addEventListener('click', () => {
+            firstLoginAdModal.classList.add('hidden');
+            if (currentUsername) {
+                localStorage.setItem(`nexus_ad_shown_${currentUsername}`, "true");
+            }
+        });
+
+        async function checkAndShowAd() {
+            try {
+                const adDocRef = doc(db, "settings", "advertisement");
+                const adSnap = await getDoc(adDocRef);
+                if (adSnap.exists() && adSnap.data().imageUrl) {
+                    dynamicAdImage.src = adSnap.data().imageUrl;
+                    if (!localStorage.getItem(`nexus_ad_shown_${currentUsername}`)) {
+                        firstLoginAdModal.classList.remove('hidden');
+                    }
+                }
+            } catch (e) {}
+        }
+
         async function ensureBotsExistInFirestore() {
             try {
                 const usersSnap = await getDocs(collection(db, "users"));
@@ -529,20 +553,11 @@
                 for (let bot of realisticContactBots) {
                     if (!existingUsernames.has(bot.username)) {
                         await addDoc(collection(db, "users"), {
-                            uid: "bot_" + bot.username,
-                            username: bot.username,
-                            gender: bot.gender,
-                            avatarUrl: bot.avatarUrl,
-                            isBot: true,
-                            activeSessionId: "",
-                            createdAt: serverTimestamp(),
-                            lastSeen: serverTimestamp()
+                            uid: "bot_" + bot.username, username: bot.username, gender: bot.gender, avatarUrl: bot.avatarUrl, isBot: true, activeSessionId: "", createdAt: serverTimestamp(), lastSeen: serverTimestamp()
                         });
                     }
                 }
-            } catch (e) {
-                console.error("Error setting up contact bots:", e);
-            }
+            } catch (e) {}
         }
 
         document.getElementById('cancelReplyBtn').addEventListener('click', () => {
@@ -552,8 +567,7 @@
 
         window.openGroupChatRoom = async function() {
             isGroupChatActive = true; activeChatReceiver = null;
-            replyingToMessage = null;
-            hasUnreadCommunityMessage = false;
+            replyingToMessage = null; hasUnreadCommunityMessage = false;
             
             if (currentUsername) {
                 localStorage.setItem(`nexus_group_read_${currentUsername}`, Date.now().toString());
@@ -654,7 +668,7 @@
                 }
                 await setDoc(scoreRef, { username: currentUsername, bestMoves: moves, updatedAt: serverTimestamp() }, { merge: true });
                 fetchLeaderboardData();
-            } catch (err) { console.error("Error saving score:", err); }
+            } catch (err) {}
         }
 
         function fetchLeaderboardData() {
@@ -775,6 +789,7 @@
                             localStorage.setItem(`nexus_group_read_${currentUsername}`, "0");
                         }
 
+                        checkAndShowAd();
                         updateLastSeenStatus();
                         startGlobalDataListener();
                     } else { showLandingPage(); }
@@ -813,19 +828,15 @@
                 localStorage.setItem("nexus_session_id", newSessionId);
 
                 const docRef = await addDoc(collection(db, "users"), {
-                    uid: userCredential.user.uid, 
-                    username: usernameInput, 
-                    gender: genderInput, 
-                    avatarUrl: selectedAvatarUrl, 
-                    activeSessionId: newSessionId,
-                    createdAt: serverTimestamp(), 
-                    lastSeen: serverTimestamp()
+                    uid: userCredential.user.uid, username: usernameInput, gender: genderInput, avatarUrl: selectedAvatarUrl, activeSessionId: newSessionId, createdAt: serverTimestamp(), lastSeen: serverTimestamp()
                 });
 
                 currentUserDocId = docRef.id; currentUsername = usernameInput;
                 currentUserData = { uid: userCredential.user.uid, username: usernameInput, gender: genderInput, avatarUrl: selectedAvatarUrl };
 
                 localStorage.setItem(`nexus_group_read_${usernameInput}`, "0");
+                
+                checkAndShowAd();
 
                 alert("ගිණුම සාර්ථකව සාදන ලදී!");
                 landingPageView.classList.add('hidden');
@@ -836,7 +847,6 @@
                 startGlobalDataListener();
             } catch (error) { 
                 alert("Registration Error: " + error.message); 
-                console.error("Firebase Auth Error:", error);
             }
         });
 
@@ -1175,8 +1185,7 @@
                         ];
                         let randomReply = botResponses[Math.floor(Math.random() * botResponses.length)];
                         await addDoc(collection(db, "chats"), {
-                            sender: activeChatReceiver, receiver: currentUsername, text: randomReply,
-                            mediaUrl: "", mediaType: "", replyTo: null, isRead: false, deletedFor: [], createdAt: serverTimestamp()
+                            sender: activeChatReceiver, receiver: currentUsername, text: randomReply, mediaUrl: "", mediaType: "", replyTo: null, isRead: false, deletedFor: [], createdAt: serverTimestamp()
                         });
                     }, 1500);
                 }
